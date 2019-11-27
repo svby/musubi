@@ -13,6 +13,7 @@ set(
         src/exception.cpp
         src/sdl/sdl_window.cpp
         src/sdl/sdl_input_poller.cpp
+        src/sdl/sdl_init.cpp
 )
 
 set(
@@ -29,6 +30,7 @@ set(
 # SDL support
 set(
         musubi_sdl_public_headers
+        include/sdl/sdl_init.h
         include/sdl/sdl_window.h
         include/sdl/sdl_input_poller.h
         include/sdl/sdl_exception.h
