@@ -10,6 +10,7 @@
 #include <string>
 #include <string_view>
 #include <iostream>
+#include <typeinfo>
 #include <iomanip>
 
 #define LIBMUSUBI_DELCP(t) t(t const &other) = delete; t &operator=(t const &other) = delete;
@@ -50,6 +51,20 @@ namespace musubi {
 
     inline std::ostream &log_e(std::string_view scope = DEFAULT_SCOPE) {
         return log_base(std::cerr, scope, LOG_PREFIX_ERROR);
+    }
+
+    template<typename To, typename From>
+    To numeric_cast(From from) {
+        using limits = std::numeric_limits<To>;
+
+        if (from <= limits::max()) return static_cast<To>(from);
+        else if (from >= limits::min()) return static_cast<To>(from - limits::min()) + limits::min();
+        else {
+            std::ostringstream error;
+            error << typeid(From).name() << " value " << from
+                  << " is out of range of target type " << typeid(To).name();
+            throw std::domain_error(error.str());
+        }
     }
 }
 

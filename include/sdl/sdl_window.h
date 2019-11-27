@@ -21,7 +21,7 @@ namespace musubi::sdl {
 
         LIBMUSUBI_DELCP(sdl_window)
 
-        sdl_window(const std::string &title, uint32 width, uint32 height);
+        explicit sdl_window(const musubi::window::start_info &startInfo);
 
         sdl_window(sdl_window &&other) noexcept;
 
