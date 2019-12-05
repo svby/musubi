@@ -15,27 +15,32 @@ set(
 
 set(
         musubi_public_headers
-        include/application.h
-        include/input.h
-        include/window.h
-        include/event_looper.h
-        include/exception.h
-        include/util/common.h
-        include/util/rw_lock.h
+        include/musubi/application.h
+        include/musubi/input.h
+        include/musubi/window.h
+        include/musubi/event_looper.h
+        include/musubi/exception.h
+)
+
+set(
+        musubi_private_headers
+        include/musubi/common.h
+        include/musubi/rw_lock.h
 )
 
 # SDL support
 set(
         musubi_sdl_public_headers
-        include/sdl/sdl_init.h
-        include/sdl/sdl_window.h
-        include/sdl/sdl_input_poller.h
-        include/sdl/sdl_exception.h
+        include/musubi/sdl/sdl_init.h
+        include/musubi/sdl/sdl_window.h
+        include/musubi/sdl/sdl_input_poller.h
+        include/musubi/sdl/sdl_exception.h
 )
 
 set(
         musubi_headers
         ${musubi_public_headers}
+        ${musubi_private_headers}
         ${musubi_sdl_public_headers}
 )
 
@@ -54,8 +59,8 @@ find_package(Epoxy REQUIRED)
 target_include_directories(musubi PRIVATE ${Epoxy_INCLUDE_DIRS})
 target_link_libraries(musubi ${Epoxy_LIBRARIES})
 
-include_directories(include/)
-target_include_directories(musubi INTERFACE include/)
+target_include_directories(musubi PUBLIC include/)
+target_include_directories(musubi PRIVATE src/)
 
 install(TARGETS musubi ARCHIVE DESTINATION lib/musubi)
-install(DIRECTORY include/ DESTINATION include/musubi)
+install(DIRECTORY include/musubi DESTINATION include)

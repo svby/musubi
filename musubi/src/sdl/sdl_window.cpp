@@ -2,11 +2,11 @@
 // Created by stuhlmeier on 11/23/19.
 //
 
-#include <sdl/sdl_window.h>
+#include <musubi/exception.h>
+#include <musubi/sdl/sdl_exception.h>
+#include <musubi/sdl/sdl_window.h>
 
-#include <exception.h>
 #include <epoxy/gl.h>
-#include <sdl/sdl_exception.h>
 
 #include <cstdint>
 #include <string>

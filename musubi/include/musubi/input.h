@@ -5,8 +5,8 @@
 #ifndef LIBMUSUBI_INPUT_H
 #define LIBMUSUBI_INPUT_H
 
-#include "window.h"
-#include "util/common.h"
+#include "musubi/common.h"
+#include "musubi/window.h"
 
 #include <unordered_map>
 

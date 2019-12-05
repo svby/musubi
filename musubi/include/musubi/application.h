@@ -5,12 +5,12 @@
 #ifndef LIBMUSUBI_APPLICATION_H
 #define LIBMUSUBI_APPLICATION_H
 
-#include "event_looper.h"
-#include "exception.h"
-#include "input.h"
-#include "window.h"
-#include "util/common.h"
-#include "util/rw_lock.h"
+#include "musubi/common.h"
+#include "musubi/event_looper.h"
+#include "musubi/exception.h"
+#include "musubi/input.h"
+#include "musubi/rw_lock.h"
+#include "musubi/window.h"
 
 #include <functional>
 #include <iostream>

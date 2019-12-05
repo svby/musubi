@@ -8,8 +8,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(musubi_demo main.cpp)
+add_dependencies(musubi_demo musubi)
 
-target_link_libraries(musubi_demo /usr/local/lib/musubi/libmusubi.a)
+get_target_property(musubi_INCLUDE_DIRS musubi INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(musubi_demo PRIVATE ${musubi_INCLUDE_DIRS})
+target_link_libraries(musubi_demo musubi)
 
 find_package(SDL2 REQUIRED)
 target_include_directories(musubi_demo PRIVATE ${SDL2_INCLUDE_DIRS})

@@ -5,7 +5,7 @@
 #ifndef LIBMUSUBI_SDL_SDL_INPUT_POLLER_H
 #define LIBMUSUBI_SDL_SDL_INPUT_POLLER_H
 
-#include "../input.h"
+#include "musubi/input.h"
 
 namespace musubi::sdl {
     class sdl_input_poller : public virtual input_poller {

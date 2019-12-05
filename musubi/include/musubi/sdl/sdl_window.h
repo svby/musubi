@@ -5,10 +5,10 @@
 #ifndef LIBMUSUBI_SDL_SDL_WINDOW_H
 #define LIBMUSUBI_SDL_SDL_WINDOW_H
 
-#include "sdl_input_poller.h"
-#include "../application.h"
-#include "../util/common.h"
-#include "../window.h"
+#include "musubi/sdl/sdl_input_poller.h"
+#include "musubi/application.h"
+#include "musubi/window.h"
+#include "musubi/common.h"
 
 #include <SDL.h>
 

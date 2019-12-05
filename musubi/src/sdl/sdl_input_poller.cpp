@@ -2,9 +2,8 @@
 // Created by stuhlmeier on 11/24/19.
 //
 
-#include <sdl/sdl_input_poller.h>
-
-#include <util/common.h>
+#include <musubi/sdl/sdl_input_poller.h>
+#include <musubi/common.h>
 
 #include <SDL_events.h>
 

@@ -5,7 +5,7 @@
 #ifndef LIBMUSUBI_WINDOW_H
 #define LIBMUSUBI_WINDOW_H
 
-#include "util/common.h"
+#include "musubi/common.h"
 
 namespace musubi {
     enum class window_mode : uint8 {

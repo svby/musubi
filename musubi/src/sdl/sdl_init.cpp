@@ -2,9 +2,8 @@
 // Created by stuhlmeier on 11/27/19.
 //
 
-#include <sdl/sdl_init.h>
-
-#include <sdl/sdl_exception.h>
+#include <musubi/sdl/sdl_init.h>
+#include <musubi/sdl/sdl_exception.h>
 
 #include <SDL.h>
 
