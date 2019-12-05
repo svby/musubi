@@ -7,11 +7,11 @@
 
 #include <cstdint>
 #include <cstring>
+#include <iomanip>
+#include <iostream>
 #include <string>
 #include <string_view>
-#include <iostream>
 #include <typeinfo>
-#include <iomanip>
 
 #define LIBMUSUBI_DELCP(t) t(t const &other) = delete; t &operator=(t const &other) = delete;
 #define LIBMUSUBI_DELMV(t) t(t &&other) = delete; t &operator=(t &&other) = delete;

@@ -6,9 +6,9 @@
 #define LIBMUSUBI_SDL_SDL_WINDOW_H
 
 #include "sdl_input_poller.h"
+#include "../application.h"
 #include "../util/common.h"
 #include "../window.h"
-#include "../application.h"
 
 #include <SDL.h>
 

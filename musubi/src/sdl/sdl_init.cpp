@@ -3,6 +3,7 @@
 //
 
 #include <sdl/sdl_init.h>
+
 #include <SDL.h>
 
 namespace musubi::sdl {

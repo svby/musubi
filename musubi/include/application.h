@@ -5,18 +5,18 @@
 #ifndef LIBMUSUBI_APPLICATION_H
 #define LIBMUSUBI_APPLICATION_H
 
-#include "util/common.h"
-#include "util/rw_lock.h"
-#include "window.h"
-#include "input.h"
 #include "event_looper.h"
 #include "exception.h"
+#include "input.h"
+#include "window.h"
+#include "util/common.h"
+#include "util/rw_lock.h"
 
-#include <thread>
-#include <unordered_map>
-#include <typeindex>
-#include <iostream>
 #include <functional>
+#include <iostream>
+#include <thread>
+#include <typeindex>
+#include <unordered_map>
 
 namespace musubi {
     using namespace std::literals;

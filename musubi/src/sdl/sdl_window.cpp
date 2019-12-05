@@ -3,11 +3,13 @@
 //
 
 #include <sdl/sdl_window.h>
-#include <sdl/sdl_exception.h>
-#include <string>
-#include <cstdint>
-#include <type_traits>
+
 #include <exception.h>
+#include <sdl/sdl_exception.h>
+
+#include <cstdint>
+#include <string>
+#include <type_traits>
 
 namespace {
     using namespace std::literals;

@@ -3,6 +3,7 @@
 //
 
 #include <sdl/sdl_input_poller.h>
+
 #include <util/common.h>
 
 #include <SDL_events.h>

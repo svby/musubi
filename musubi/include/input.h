@@ -5,9 +5,10 @@
 #ifndef LIBMUSUBI_INPUT_H
 #define LIBMUSUBI_INPUT_H
 
-#include <unordered_map>
-#include "util/common.h"
 #include "window.h"
+#include "util/common.h"
+
+#include <unordered_map>
 
 namespace musubi {
     struct input_state final {
