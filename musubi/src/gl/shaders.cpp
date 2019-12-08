@@ -10,6 +10,7 @@
 #include <vector>
 
 namespace {
+    using namespace std::literals;
     using std::nullopt;
 
     std::string combineError(const std::string &what, const std::optional<std::string> &shaderLog) noexcept {
@@ -18,6 +19,25 @@ namespace {
             std::ostringstream error;
             error << what << ":\n" << shaderLog->data();
             return error.str();
+        }
+    }
+
+    std::string getShaderTypeName(const GLenum shaderType) {
+        switch (shaderType) {
+            case GL_VERTEX_SHADER:
+                return "vertex";
+            case GL_FRAGMENT_SHADER:
+                return "fragment";
+            case GL_GEOMETRY_SHADER:
+                return "geometry";
+            case GL_COMPUTE_SHADER:
+                return "compute";
+            case GL_TESS_CONTROL_SHADER:
+                return "tessellation control";
+            case GL_TESS_EVALUATION_SHADER:
+                return "tessellation evaluation";
+            default:
+                return "unknown ("s + std::to_string(shaderType) + ")"s;
         }
     }
 
@@ -33,31 +53,7 @@ namespace {
 
         if (success == GL_FALSE) {
             std::ostringstream error;
-            error << "Error compiling ";
-            switch (shaderType) {
-                case GL_VERTEX_SHADER:
-                    error << "vertex";
-                    break;
-                case GL_FRAGMENT_SHADER:
-                    error << "fragment";
-                    break;
-                case GL_GEOMETRY_SHADER:
-                    error << "geometry";
-                    break;
-                case GL_COMPUTE_SHADER:
-                    error << "compute";
-                    break;
-                case GL_TESS_CONTROL_SHADER:
-                    error << "tessellation control";
-                    break;
-                case GL_TESS_EVALUATION_SHADER:
-                    error << "tessellation evaluation";
-                    break;
-                default:
-                    error << "unknown (" << shaderType << ')';
-                    break;
-            }
-            error << " shader";
+            error << "Error compiling " << getShaderTypeName(shaderType) << " shader";
 
             GLint logLength;
             glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLength);
@@ -74,6 +70,9 @@ namespace {
 
             throw musubi::gl::shader_error(error.str(), shaderLog);
         }
+
+        musubi::log_i("compileShader") << "Successfully compiled "
+                                       << getShaderTypeName(shaderType) << " shader " << id << '\n';
 
         return id;
     }
@@ -100,7 +99,10 @@ namespace musubi::gl {
     }
 
     shader_program::~shader_program() noexcept {
-        if (operator bool()) glDeleteProgram(handle);
+        if (operator bool()) {
+            glDeleteProgram(handle);
+            musubi::log_i("shader_program") << "Deleted shader program " << handle << '\n';
+        }
         handle = 0;
     }
 
@@ -142,6 +144,8 @@ namespace musubi::gl {
 
             throw shader_error("Error linking shader program", programLog);
         }
+
+        musubi::log_i("shader_program") << "Successfully linked shader program " << id << '\n';
 
         handle = id;
         return id;
