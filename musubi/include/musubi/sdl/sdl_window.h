@@ -10,7 +10,7 @@
 #include "musubi/window.h"
 #include "musubi/common.h"
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include <string>
 

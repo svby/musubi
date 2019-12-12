@@ -54,7 +54,8 @@ set(
         include/musubi/exception.h
         include/musubi/common.h
         include/musubi/rw_lock.h
-        include/musubi/camera.h)
+        include/musubi/camera.h
+)
 
 set(
         musubi_private_headers
@@ -69,8 +70,7 @@ add_library(
 target_compile_features(musubi PRIVATE cxx_std_17)
 
 find_package(SDL2 REQUIRED)
-target_include_directories(musubi PRIVATE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(musubi ${SDL2_LIBRARIES})
+target_link_libraries(musubi SDL2::SDL2)
 
 find_package(Epoxy REQUIRED)
 target_include_directories(musubi PRIVATE ${Epoxy_INCLUDE_DIRS})

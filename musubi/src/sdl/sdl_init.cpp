@@ -5,7 +5,7 @@
 #include <musubi/sdl/sdl_init.h>
 #include <musubi/sdl/sdl_exception.h>
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include <string>
 

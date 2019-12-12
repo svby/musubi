@@ -15,8 +15,7 @@ target_include_directories(musubi_demo PRIVATE ${musubi_INCLUDE_DIRS})
 target_link_libraries(musubi_demo musubi)
 
 find_package(SDL2 REQUIRED)
-target_include_directories(musubi_demo PRIVATE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(musubi_demo ${SDL2_LIBRARIES})
+target_link_libraries(musubi SDL2::SDL2)
 
 find_package(Epoxy REQUIRED)
 target_include_directories(musubi_demo PRIVATE ${Epoxy_INCLUDE_DIRS})

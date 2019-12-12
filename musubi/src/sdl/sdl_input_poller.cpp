@@ -5,7 +5,7 @@
 #include <musubi/sdl/sdl_input_poller.h>
 #include <musubi/common.h>
 
-#include <SDL_events.h>
+#include <SDL2/SDL_events.h>
 
 namespace musubi::sdl {
     void sdl_input_poller::poll(application_input_state &inputState) {
