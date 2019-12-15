@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(
         musubi_sources
         src/event_looper.cpp
+        src/exception.cpp
         src/sdl/sdl_window.cpp
         src/sdl/sdl_input_poller.cpp
 )
@@ -20,6 +21,7 @@ set(
         include/input.h
         include/window.h
         include/event_looper.h
+        include/exception.h
         include/util/common.h
         include/util/rw_lock.h
 )
@@ -29,6 +31,7 @@ set(
         musubi_sdl_public_headers
         include/sdl/sdl_window.h
         include/sdl/sdl_input_poller.h
+        include/sdl/sdl_exception.h
 )
 
 set(

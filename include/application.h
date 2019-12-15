@@ -10,6 +10,7 @@
 #include "window.h"
 #include "input.h"
 #include "event_looper.h"
+#include "exception.h"
 
 #include <thread>
 #include <unordered_map>
@@ -18,6 +19,8 @@
 #include <functional>
 
 namespace musubi {
+    using namespace std::literals;
+
     template<typename EventLoop = blocking_looper>
     class application {
     public:
@@ -63,9 +66,8 @@ namespace musubi {
             {
                 auto lock{_state->windowsLock.write_lock()};
                 const auto result = _state->windowMap.emplace(id, std::dynamic_pointer_cast<window>(ptr));
-                if (!result.second) {
-                    log_e("application") << "Error: window " << id << " already exists\n";
-                }
+                if (!result.second)
+                    throw application_error("A window "s + std::to_string(id) + " is already registered"s);
             }
 
             return ptr;

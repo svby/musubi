@@ -3,10 +3,15 @@
 //
 
 #include <sdl/sdl_window.h>
-#include <iostream>
+#include <sdl/sdl_exception.h>
+#include <string>
 #include <cstdint>
+#include <type_traits>
+#include <exception.h>
 
 namespace {
+    using namespace std::literals;
+
     const int SDL_UNDEFINED_X = SDL_WINDOWPOS_UNDEFINED; // NOLINT(hicpp-signed-bitwise)
     const int SDL_UNDEFINED_Y = SDL_UNDEFINED_X;
 
@@ -21,16 +26,19 @@ namespace {
             case musubi::window_mode::minimized:
                 return SDL_WINDOW_MINIMIZED;
             default:
-                // TODO exceptions
-                return 0;
+                throw musubi::assertion_error(
+                        "Cannot construct SDL flag from unknown window mode "s
+                        + std::to_string(static_cast<std::underlying_type_t<musubi::window_mode>>(windowMode))
+                );
         }
     }
 }
 
 namespace musubi::sdl {
+    using namespace std::literals;
+
     sdl_window::sdl_window(const start_info &startInfo)
             : wrapped(nullptr), context(nullptr) {
-        // TODO exceptions!
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
@@ -48,16 +56,10 @@ namespace musubi::sdl {
                 | (startInfo.resizable ? SDL_WINDOW_RESIZABLE : 0)
                 | windowModeFlags(startInfo.window_mode)
         );
-        if (wrapped == nullptr) {
-            log_e("sdl_window") << "Could not create SDL window: " << SDL_GetError() << '\n';
-            return;
-        }
+        if (wrapped == nullptr) throw sdl_exception("Could not create SDL window: "s + SDL_GetError());
 
         context = SDL_GL_CreateContext(wrapped);
-        if (context == nullptr) {
-            log_e("sdl_window") << "Could not create GL context: " << SDL_GetError() << '\n';
-            return;
-        }
+        if (context == nullptr) throw sdl_exception("Could not create GL context: "s + SDL_GetError());
     }
 
     sdl_window::sdl_window(musubi::sdl::sdl_window &&other) noexcept

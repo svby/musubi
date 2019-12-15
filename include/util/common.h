@@ -17,6 +17,8 @@
 #define LIBMUSUBI_DELMV(t) t(t &&other) = delete; t &operator=(t &&other) = delete;
 
 namespace musubi {
+    using namespace std::literals;
+
     using int8 = std::int_fast8_t;
     using int16 = std::int_fast16_t;
     using int32 = std::int_fast32_t;
@@ -60,10 +62,10 @@ namespace musubi {
         if (from <= limits::max()) return static_cast<To>(from);
         else if (from >= limits::min()) return static_cast<To>(from - limits::min()) + limits::min();
         else {
-            std::ostringstream error;
-            error << typeid(From).name() << " value " << from
-                  << " is out of range of target type " << typeid(To).name();
-            throw std::domain_error(error.str());
+            throw std::domain_error(
+                    std::string(typeid(From).name()) + " value "s + std::to_string(from)
+                    + " is out of range of target type "s + typeid(To).name()
+            );
         }
     }
 }
