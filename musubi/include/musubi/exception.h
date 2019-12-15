@@ -16,6 +16,11 @@ namespace musubi {
         assertion_error();
     };
 
+    class illegal_state_error : public std::logic_error {
+    public:
+        using std::logic_error::logic_error;
+    };
+
     class application_error : public std::runtime_error {
     public:
         using std::runtime_error::runtime_error;

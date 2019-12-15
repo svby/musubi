@@ -7,11 +7,14 @@ project(libmusubi LANGUAGES CXX)
 # OpenGL support
 set(
         musubi_gl_public_headers
+        include/musubi/gl/common.h
+        include/musubi/gl/shapes.h
         include/musubi/gl/shaders.h
 )
 
 set(
         musubi_gl_sources
+        src/gl/shapes.cpp
         src/gl/shaders.cpp
 )
 

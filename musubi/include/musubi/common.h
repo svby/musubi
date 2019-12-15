@@ -14,7 +14,8 @@
 #include <typeinfo>
 
 #define LIBMUSUBI_DELCP(t) t(t const &other) = delete; t &operator=(t const &other) = delete;
-#define LIBMUSUBI_DELMV(t) t(t &&other) = delete; t &operator=(t &&other) = delete;
+
+#define LIBMUSUBI_PIMPL struct impl; ::musubi::pimpl_t<impl> pImpl;
 
 namespace musubi {
     using namespace std::literals;
@@ -28,6 +29,12 @@ namespace musubi {
     using uint16 = std::uint_fast16_t;
     using uint32 = std::uint_fast32_t;
     using uint64 = std::uint_fast64_t;
+
+    template<typename T>
+    constexpr T pi{3.141592653589793238462643383279502884L};
+
+    template<typename Impl>
+    using pimpl_t = std::unique_ptr<Impl>;
 
     constexpr std::string::size_type SCOPE_LENGTH = 16u;
 
