@@ -82,6 +82,10 @@ namespace musubi::gl {
 
     struct gl_texture_renderer::impl {
         shader_program shader{};
+        // Cached locations
+        GLint modelMatrixUniform{-1}, viewMatrixUniform{-1}, projectionMatrixUniform{-1};
+        GLint textureUniform{-1};
+
         GLuint vao{0};
 
         GLuint count{0};
@@ -124,6 +128,11 @@ namespace musubi::gl {
                     "}"
             );
 
+            textureUniform = glGetUniformLocation(shader, "u_texture");
+            modelMatrixUniform = glGetUniformLocation(shader, "mM");
+            viewMatrixUniform = glGetUniformLocation(shader, "mV");
+            projectionMatrixUniform = glGetUniformLocation(shader, "mP");
+
             glGenVertexArrays(1, &vao);
         }
 
@@ -165,15 +174,10 @@ namespace musubi::gl {
             glActiveTexture(GL_TEXTURE0 + 0);
             glBindTexture(GL_TEXTURE_2D, *currentTexture);
 
-            const auto tLocation = glGetUniformLocation(shader, "u_texture");
-            const auto mLocation = glGetUniformLocation(shader, "mM");
-            const auto vLocation = glGetUniformLocation(shader, "mV");
-            const auto pLocation = glGetUniformLocation(shader, "mP");
-
-            glUniform1i(tLocation, 0);
-            glUniformMatrix4fv(mLocation, 1, GL_FALSE, glm::value_ptr(parent.transform));
-            glUniformMatrix4fv(vLocation, 1, GL_FALSE, glm::value_ptr(parent.camera.view));
-            glUniformMatrix4fv(pLocation, 1, GL_FALSE, glm::value_ptr(parent.camera.projection));
+            glUniform1i(textureUniform, 0);
+            glUniformMatrix4fv(modelMatrixUniform, 1, GL_FALSE, glm::value_ptr(parent.transform));
+            glUniformMatrix4fv(viewMatrixUniform, 1, GL_FALSE, glm::value_ptr(parent.camera.view));
+            glUniformMatrix4fv(projectionMatrixUniform, 1, GL_FALSE, glm::value_ptr(parent.camera.projection));
 
             glDrawArrays(GL_TRIANGLES, 0, count);
 
