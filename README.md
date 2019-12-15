@@ -12,6 +12,19 @@ cmake .. && make all install
 
 This will install `libmusubi` to /usr/local by default.
 
+musubi requires C++17 features and support for older standards is not a goal.
+It will likely make extensive use of C++20 (concepts, ranges, `std::format`, `std::numbers`, `consteval`, ...)
+once the standard is published in the near future.
+
+Currently, the library compiles and the sample runs fine on both Clang and GCC.
+
+**Note:** The CMake scripts for this project assume SDL2 2.0.8 (March 2018) or later is installed.
+Earlier versions of SDL [do not configure a `SDL2::SDL2` target][arch-sdlcmake], which musubi tries to import.
+
+Particularly of note is that Ubuntu's current version of `libsdl2-dev` (as of eoan)
+suffers from this issue; building/installing SDL2 from source is required here.
+Rolling-release distributions (such as Arch or Gentoo) are up-to-date and therefore unaffected.
+
 ## Components
 
 ### `libmusubi`
@@ -20,8 +33,10 @@ This will install `libmusubi` to /usr/local by default.
 
  - graphics abstractions
    - windowing (SDL2)
+   - pixmaps
    - rendering
      - shapes (OpenGL)
+     - textures (OpenGL)
 
 Currently, `libmusubi` will assume and request OpenGL 3.3 or greater by default.
 No abstractions for versions older than 3.0 are planned, due to API differences.
@@ -47,3 +62,5 @@ Licenses for its source dependencies are located in `licenses/`.
  - [SDL 2](https://www.libsdl.org/) (zlib)
  - [Epoxy](https://github.com/anholt/libepoxy) (MIT)
  - [GLM](https://github.com/g-truc/glm) (Happy Bunny)
+
+[arch-sdlcmake]: https://bbs.archlinux.org/viewtopic.php?pid=1777965#p1777965
