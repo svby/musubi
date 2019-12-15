@@ -48,34 +48,34 @@ int main() {
                 glClearColor(0, 0, 0, 1);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                renderer.begin();
+                renderer.begin_batch();
                 const auto x = 500 * std::sin(elapsed);
                 const auto y = 220 * std::cos(2 * pi<float> * elapsed);
                 const auto hl = 50.0f;
                 renderer.color = vec4{1, 0, 0, 1};
                 renderer.transform =
                         rotate(translate(identity<mat4>(), vec3{x, y, 0}), 4 * elapsed, vec3{0, 0, 1});
-                renderer.draw_line(-hl, -hl, -hl, hl);
-                renderer.draw_line(-hl, hl, hl, hl);
-                renderer.draw_line(hl, hl, hl, -hl);
-                renderer.draw_line(hl, -hl, -hl, -hl);
-                renderer.end(true);
+                renderer.batch_draw_line(-hl, -hl, -hl, hl);
+                renderer.batch_draw_line(-hl, hl, hl, hl);
+                renderer.batch_draw_line(hl, hl, hl, -hl);
+                renderer.batch_draw_line(hl, -hl, -hl, -hl);
+                renderer.end_batch(true);
 
-                renderer.begin();
+                renderer.begin_batch();
                 renderer.color = vec4{
                         std::sin(elapsed + 0.0f * SHIFT) / 2.0f + 0.5f,
                         std::sin(elapsed + 1.0f * SHIFT) / 2.0f + 0.5f,
                         std::sin(elapsed + 2.0f * SHIFT) / 2.0f + 0.5f,
                         1
                 };
-                renderer.draw_circle(0, 0, 300);
-                renderer.end();
+                renderer.batch_draw_circle(0, 0, 300);
+                renderer.end_batch(false);
 
-                renderer.begin();
+                renderer.begin_batch();
                 renderer.color = vec4{0, 1, 1, 1};
                 renderer.transform = rotate(identity<mat4>(), elapsed, vec3{0, 0, 1});
-                renderer.draw_rectangle(0, -50, 300, 100);
-                renderer.end(true);
+                renderer.batch_draw_rectangle(0, -50, 300, 100);
+                renderer.end_batch(true);
 
                 window->flip();
             }

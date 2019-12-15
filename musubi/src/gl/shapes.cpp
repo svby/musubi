@@ -63,14 +63,18 @@ namespace musubi::gl {
 
         ~impl() { glDeleteVertexArrays(1, &vao); }
 
-        void begin() {
-            if (drawing) throw illegal_state_error("Cannot call begin twice, renderer is already drawing");
+        void begin_batch() {
+            if (drawing) throw illegal_state_error("Cannot call begin_batch twice, renderer is already drawing");
             drawing = true;
         }
 
-        void end(const gl_shape_renderer &parent) {
+        void end_batch(const gl_shape_renderer &parent) {
             if (!drawing) throw illegal_state_error("Cannot end shape batch, begin has not yet been called");
+            flush(parent);
+            drawing = false;
+        }
 
+        void flush(const gl_shape_renderer &parent) {
             GLuint vbo{0};
             glBindVertexArray(vao);
             glGenBuffers(1, &vbo);
@@ -108,11 +112,11 @@ namespace musubi::gl {
             count = 0;
             vertices.clear();
             colors.clear();
-
-            drawing = false;
         }
 
-        void draw_line(const gl_shape_renderer &parent, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+        void batch_draw_line(const gl_shape_renderer &parent, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+            if (!drawing) throw illegal_state_error("Cannot add operation to batch, begin has not yet been called");
+
             vertices.push_back(x1);
             vertices.push_back(y1);
             vertices.push_back(0.0f);
@@ -130,14 +134,14 @@ namespace musubi::gl {
             count += 2;
         }
 
-        void draw_rectangle(const gl_shape_renderer &parent, GLfloat x, GLfloat y, GLfloat w, GLfloat h) {
-            draw_line(parent, x, y, x + w, y);
-            draw_line(parent, x + w, y, x + w, y + h);
-            draw_line(parent, x + w, y + h, x, y + h);
-            draw_line(parent, x, y + h, x, y);
+        void batch_draw_rectangle(const gl_shape_renderer &parent, GLfloat x, GLfloat y, GLfloat w, GLfloat h) {
+            batch_draw_line(parent, x, y, x + w, y);
+            batch_draw_line(parent, x + w, y, x + w, y + h);
+            batch_draw_line(parent, x + w, y + h, x, y + h);
+            batch_draw_line(parent, x, y + h, x, y);
         }
 
-        void draw_circle(const gl_shape_renderer &parent, GLfloat x, GLfloat y, GLfloat r, uint32 segments) {
+        void batch_draw_circle(const gl_shape_renderer &parent, GLfloat x, GLfloat y, GLfloat r, uint32 segments) {
             if (segments < 3u) {
                 throw std::invalid_argument("Circle segment count must be >= 3, was: "s + std::to_string(segments));
             }
@@ -148,35 +152,35 @@ namespace musubi::gl {
             for (GLuint i = 0; i < segments; angle += step, ++i) {
                 float currentX = r * std::cos(angle) + x;
                 float currentY = r * std::sin(angle) + y;
-                draw_line(parent, lastX, lastY, currentX, currentY);
+                batch_draw_line(parent, lastX, lastY, currentX, currentY);
                 lastX = currentX;
                 lastY = currentY;
             }
         }
     };
 
-    gl_shape_renderer::gl_shape_renderer() noexcept : pImpl(std::make_unique<impl>()), transform(IDENTITY) {}
+    gl_shape_renderer::gl_shape_renderer() noexcept : pImpl(std::make_unique<impl>()) {}
 
     gl_shape_renderer::~gl_shape_renderer() noexcept = default;
 
     void gl_shape_renderer::init() { pImpl->init(); }
 
-    void gl_shape_renderer::begin() { pImpl->begin(); }
+    void gl_shape_renderer::begin_batch() { pImpl->begin_batch(); }
 
-    void gl_shape_renderer::end(bool resetTransform) {
-        pImpl->end(*this);
+    void gl_shape_renderer::end_batch(bool resetTransform) {
+        pImpl->end_batch(*this);
         if (resetTransform) transform = IDENTITY;
     }
 
-    void gl_shape_renderer::draw_line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
-        pImpl->draw_line(*this, x1, y1, x2, y2);
+    void gl_shape_renderer::batch_draw_line(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+        pImpl->batch_draw_line(*this, x1, y1, x2, y2);
     }
 
-    void gl_shape_renderer::draw_rectangle(GLfloat x, GLfloat y, GLfloat w, GLfloat h) {
-        pImpl->draw_rectangle(*this, x, y, w, h);
+    void gl_shape_renderer::batch_draw_rectangle(GLfloat x, GLfloat y, GLfloat w, GLfloat h) {
+        pImpl->batch_draw_rectangle(*this, x, y, w, h);
     }
 
-    void gl_shape_renderer::draw_circle(GLfloat x, GLfloat y, GLfloat r, uint32 segments) {
-        pImpl->draw_circle(*this, x, y, r, segments);
+    void gl_shape_renderer::batch_draw_circle(GLfloat x, GLfloat y, GLfloat r, uint32 segments) {
+        pImpl->batch_draw_circle(*this, x, y, r, segments);
     }
 }

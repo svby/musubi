@@ -43,6 +43,7 @@ set(
         src/exception.cpp
         src/camera.cpp
         src/pixmap.cpp
+        src/renderer.cpp
 )
 
 set(
@@ -58,6 +59,7 @@ set(
         include/musubi/rw_lock.h
         include/musubi/camera.h
         include/musubi/pixmap.h
+        include/musubi/renderer.h
 )
 
 set(
