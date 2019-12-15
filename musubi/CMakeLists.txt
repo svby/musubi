@@ -10,12 +10,14 @@ set(
         include/musubi/gl/common.h
         include/musubi/gl/shapes.h
         include/musubi/gl/shaders.h
+        include/musubi/gl/textures.h
 )
 
 set(
         musubi_gl_sources
         src/gl/shapes.cpp
         src/gl/shaders.cpp
+        src/gl/textures.cpp
 )
 
 # SDL support

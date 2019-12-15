@@ -33,6 +33,12 @@ namespace musubi {
     template<typename T>
     constexpr T pi{3.141592653589793238462643383279502884L};
 
+    constexpr uint32 rgb8(uint8 r, uint8 g, uint8 b) {
+        return ((r & 0xFFu) << 16u) | ((g & 0xFFu) << 8u) | (b & 0xFFu);
+    }
+
+    constexpr uint32 rgba8(uint8 r, uint8 g, uint8 b, uint8 a = 255u) { return (rgb8(r, g, b) << 8u) | a; }
+
     template<typename Impl>
     using pimpl_t = std::unique_ptr<Impl>;
 
