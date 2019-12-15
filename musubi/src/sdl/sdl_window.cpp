@@ -18,7 +18,7 @@ namespace {
     const int SDL_UNDEFINED_X = SDL_WINDOWPOS_UNDEFINED; // NOLINT(hicpp-signed-bitwise)
     const int SDL_UNDEFINED_Y = SDL_UNDEFINED_X;
 
-    inline constexpr std::uint32_t windowModeFlags(musubi::window_mode windowMode) {
+    constexpr std::uint32_t windowModeFlags(musubi::window_mode windowMode) {
         switch (windowMode) {
             case musubi::window_mode::windowed:
                 return 0;

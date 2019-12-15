@@ -61,7 +61,7 @@ namespace {
             std::string shaderLog;
             if (logLength == 0) shaderLog = "(no shader log available)";
             else {
-                std::unique_ptr<GLchar[]> buffer(new GLchar[logLength]{});
+                auto buffer{std::make_unique<GLchar[]>(logLength)};
                 glGetShaderInfoLog(id, logLength, &logLength, buffer.get());
                 shaderLog = std::string(buffer.get(), logLength);
             }
@@ -135,7 +135,7 @@ namespace musubi::gl {
             std::string programLog;
             if (logLength == 0) programLog = "(no program log available)";
             else {
-                std::unique_ptr<GLchar[]> buffer(new GLchar[logLength]);
+                auto buffer{std::make_unique<GLchar[]>(logLength)};
                 glGetProgramInfoLog(id, logLength, &logLength, buffer.get());
                 programLog = std::string(buffer.get(), logLength);
             }

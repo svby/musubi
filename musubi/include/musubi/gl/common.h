@@ -5,6 +5,8 @@
 #ifndef MUSUBI_GL_COMMON_H
 #define MUSUBI_GL_COMMON_H
 
+#include <epoxy/gl.h>
+
 namespace musubi::gl {
     inline constexpr char *get_buffer_offset(GLuint i) { return static_cast<char *>(nullptr) + i; }
 }
