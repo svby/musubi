@@ -41,7 +41,9 @@ set(
         ${musubi_sdl_sources}
         src/event_looper.cpp
         src/exception.cpp
-        src/camera.cpp)
+        src/camera.cpp
+        src/pixmap.cpp
+)
 
 set(
         musubi_public_headers
@@ -55,6 +57,7 @@ set(
         include/musubi/common.h
         include/musubi/rw_lock.h
         include/musubi/camera.h
+        include/musubi/pixmap.h
 )
 
 set(
