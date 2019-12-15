@@ -6,12 +6,12 @@
 #define LIBMUSUBI_SDL_SDL_INIT_H
 
 namespace musubi::sdl {
-    void init() noexcept;
+    void init();
 
     void dispose() noexcept;
 
     struct scoped_init final {
-        scoped_init() noexcept;
+        scoped_init();
 
         ~scoped_init() noexcept;
     };

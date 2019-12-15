@@ -5,6 +5,7 @@
 #include <sdl/sdl_window.h>
 
 #include <exception.h>
+#include <epoxy/gl.h>
 #include <sdl/sdl_exception.h>
 
 #include <cstdint>
@@ -42,8 +43,8 @@ namespace musubi::sdl {
     sdl_window::sdl_window(const start_info &startInfo)
             : wrapped(nullptr), context(nullptr) {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, true);
 
         wrapped = SDL_CreateWindow(
@@ -62,6 +63,9 @@ namespace musubi::sdl {
 
         context = SDL_GL_CreateContext(wrapped);
         if (context == nullptr) throw sdl_exception("Could not create GL context: "s + SDL_GetError());
+
+        log_i("sdl_window")
+                << "Created window with GL_VERSION " << glGetString(GL_VERSION) << '\n';
     }
 
     sdl_window::sdl_window(musubi::sdl::sdl_window &&other) noexcept
