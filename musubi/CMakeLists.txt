@@ -4,6 +4,17 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
 project(libmusubi LANGUAGES CXX)
 
+# OpenGL support
+set(
+        musubi_gl_public_headers
+        include/musubi/gl/shaders.h
+)
+
+set(
+        musubi_gl_sources
+        src/gl/shaders.cpp
+)
+
 # SDL support
 set(
         musubi_sdl_public_headers
@@ -23,6 +34,7 @@ set(
 # Aggregate sources
 set(
         musubi_sources
+        ${musubi_gl_sources}
         ${musubi_sdl_sources}
         src/event_looper.cpp
         src/exception.cpp
@@ -30,6 +42,7 @@ set(
 
 set(
         musubi_public_headers
+        ${musubi_gl_public_headers}
         ${musubi_sdl_public_headers}
         include/musubi/application.h
         include/musubi/input.h
