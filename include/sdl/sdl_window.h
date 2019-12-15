@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/23/19.
 //
 
-#ifndef LIBMUSUBI_SDL_WINDOW_H
-#define LIBMUSUBI_SDL_WINDOW_H
+#ifndef LIBMUSUBI_SDL_SDL_WINDOW_H
+#define LIBMUSUBI_SDL_SDL_WINDOW_H
 
 #include "sdl_input_poller.h"
 #include "../util/common.h"
@@ -41,4 +41,4 @@ namespace musubi::sdl {
     };
 }
 
-#endif //LIBMUSUBI_SDL_WINDOW_H
+#endif //LIBMUSUBI_SDL_SDL_WINDOW_H

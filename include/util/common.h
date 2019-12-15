@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/22/19.
 //
 
-#ifndef LIBMUSUBI_COMMON_H
-#define LIBMUSUBI_COMMON_H
+#ifndef LIBMUSUBI_UTIL_COMMON_H
+#define LIBMUSUBI_UTIL_COMMON_H
 
 #include <cstdint>
 #include <cstring>
@@ -68,4 +68,4 @@ namespace musubi {
     }
 }
 
-#endif //LIBMUSUBI_COMMON_H
+#endif //LIBMUSUBI_UTIL_COMMON_H
