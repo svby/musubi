@@ -75,6 +75,7 @@ add_library(
         ${musubi_private_headers}
 )
 target_compile_features(musubi PRIVATE cxx_std_17)
+target_compile_options(musubi PRIVATE -Wall -Wextra -pedantic -Werror)
 
 find_package(SDL2 REQUIRED)
 target_link_libraries(musubi SDL2::SDL2)

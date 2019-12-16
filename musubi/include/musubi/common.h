@@ -67,20 +67,6 @@ namespace musubi {
     inline std::ostream &log_e(std::string_view scope = DEFAULT_SCOPE) {
         return log_base(std::cerr, scope, LOG_PREFIX_ERROR);
     }
-
-    template<typename To, typename From>
-    To numeric_cast(From from) {
-        using limits = std::numeric_limits<To>;
-
-        if (from <= limits::max()) return static_cast<To>(from);
-        else if (from >= limits::min()) return static_cast<To>(from - limits::min()) + limits::min();
-        else {
-            throw std::domain_error(
-                    std::string(typeid(From).name()) + " value "s + std::to_string(from)
-                    + " is out of range of target type "s + typeid(To).name()
-            );
-        }
-    }
 }
 
 #endif //LIBMUSUBI_UTIL_COMMON_H

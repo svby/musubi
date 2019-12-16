@@ -32,7 +32,7 @@ namespace musubi {
             bool hidden{false};
             bool undecorated{false};
             bool resizable{false};
-            window_mode window_mode{window_mode::windowed};
+            window_mode mode{window_mode::windowed};
         };
 
         using id_type = uint32;

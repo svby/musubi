@@ -15,7 +15,7 @@ namespace musubi {
         renderer();
 
     public:
-        camera camera{};
+        ::musubi::camera camera{};
         glm::mat4 transform{1.0f};
 
         virtual ~renderer();

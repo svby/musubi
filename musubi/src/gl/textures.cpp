@@ -194,8 +194,7 @@ namespace musubi::gl {
             texCoords.clear();
         }
 
-        void
-        batch_draw_texture(const gl_texture_renderer &parent, GLfloat x, GLfloat y, GLfloat width, GLfloat height) {
+        void batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height) {
             if (!drawing) throw illegal_state_error("Cannot add operation to batch, begin has not yet been called");
 
             // Triangle 1
@@ -244,6 +243,6 @@ namespace musubi::gl {
     }
 
     void gl_texture_renderer::batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height) {
-        pImpl->batch_draw_texture(*this, x, y, width, height);
+        pImpl->batch_draw_texture(x, y, width, height);
     }
 }

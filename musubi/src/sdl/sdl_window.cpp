@@ -49,15 +49,15 @@ namespace musubi::sdl {
 
         wrapped = SDL_CreateWindow(
                 startInfo.title.c_str(),
-                musubi::numeric_cast<int>(startInfo.x == start_info::UNDEFINED_X ? SDL_UNDEFINED_X : startInfo.x),
-                musubi::numeric_cast<int>(startInfo.y == start_info::UNDEFINED_Y ? SDL_UNDEFINED_Y : startInfo.y),
+                static_cast<int>(startInfo.x == start_info::UNDEFINED_X ? SDL_UNDEFINED_X : startInfo.x),
+                static_cast<int>(startInfo.y == start_info::UNDEFINED_Y ? SDL_UNDEFINED_Y : startInfo.y),
                 startInfo.width, startInfo.height,
 
                 SDL_WINDOW_OPENGL // NOLINT(hicpp-signed-bitwise)
                 | (startInfo.hidden ? SDL_WINDOW_HIDDEN : SDL_WINDOW_SHOWN)
                 | (startInfo.undecorated ? SDL_WINDOW_BORDERLESS : 0)
                 | (startInfo.resizable ? SDL_WINDOW_RESIZABLE : 0)
-                | windowModeFlags(startInfo.window_mode)
+                | windowModeFlags(startInfo.mode)
         );
         if (wrapped == nullptr) throw sdl_exception("Could not create SDL window: "s + SDL_GetError());
 

@@ -62,10 +62,10 @@ int main() {
         application demo;
 
         const auto windowPtr = demo.create_window<sdl::sdl_window>(window::start_info{
+                .title = "musubi_demo",
                 .width = 1280,
                 .height = 720,
-                .title = "musubi_demo",
-                .window_mode = window_mode::windowed
+                .mode = window_mode::windowed
         });
 
         const auto texture{std::make_shared<musubi::gl::texture>(pixmap, GL_RGBA8)};
