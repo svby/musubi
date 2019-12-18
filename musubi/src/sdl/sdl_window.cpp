@@ -47,6 +47,14 @@ namespace musubi::sdl {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, true);
 
+        if (SDL_GL_SetSwapInterval(-1) == -1) {
+            log_w("sdl_window") << "Adaptive vertical sync is not available; "
+                                   "enabling standard vertical sync\n";
+            SDL_GL_SetSwapInterval(1);
+        } else {
+            log_i("sdl_window") << "Adaptive vertical sync enabled\n";
+        }
+
         wrapped = SDL_CreateWindow(
                 startInfo.title.c_str(),
                 static_cast<int>(startInfo.x == start_info::UNDEFINED_X ? SDL_UNDEFINED_X : startInfo.x),
