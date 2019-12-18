@@ -17,7 +17,7 @@ namespace musubi {
     using std::byte;
 
     enum class pixmap_format : uint8 {
-        rgba8
+        rgb8, rgba8
     };
 
     class pixmap {
@@ -39,6 +39,13 @@ namespace musubi {
     struct pixmap_traits;
 
     template<>
+    struct pixmap_traits<pixmap_format::rgb8> {
+        using element_type = uint32;
+
+        static constexpr uint8 get_bytes_per_pixel() { return 3; }
+    };
+
+    template<>
     struct pixmap_traits<pixmap_format::rgba8> {
         using element_type = uint32;
 
@@ -51,9 +58,9 @@ namespace musubi {
         buffer_pixmap(uint32 width, uint32 height) noexcept
                 : initialized(false), width(width), height(height) {}
 
-        buffer_pixmap(uint32 width, uint32 height, const byte *last)
+        buffer_pixmap(uint32 width, uint32 height, const byte *buffer)
                 : width(width), height(height),
-                  buffer(last, last + get_buffer_size(width, height)),
+                  buffer(buffer, buffer + get_buffer_size(width, height)),
                   initialized(true) {}
 
         template<typename Iter>
