@@ -11,6 +11,8 @@
 
 #include <epoxy/gl.h>
 
+#include <memory>
+
 namespace musubi::gl {
     class texture final {
     public:
@@ -18,7 +20,7 @@ namespace musubi::gl {
 
         texture() noexcept;
 
-        explicit texture(const pixmap &source, GLenum internalFormat = GL_RGBA8);
+        explicit texture(const pixmap &source, bool shouldFlip = false, GLenum internalFormat = GL_RGBA8);
 
         texture(texture &&other) noexcept;
 
@@ -26,7 +28,9 @@ namespace musubi::gl {
 
         ~texture() noexcept;
 
-        GLuint load(const pixmap &source, GLenum internalFormat = GL_RGBA8);
+        GLuint load(const pixmap &source, bool shouldFlip = false, GLenum internalFormat = GL_RGBA8);
+
+        [[nodiscard]] bool should_flip() const noexcept;
 
         explicit operator bool() const noexcept;
 
@@ -34,6 +38,18 @@ namespace musubi::gl {
 
     private:
         GLuint handle{0};
+        bool flip{false};
+    };
+
+    struct texture_region final {
+    public:
+        std::weak_ptr<texture> texture;
+        GLfloat u1, v1, u2, v2;
+
+        texture_region(const std::shared_ptr<::musubi::gl::texture> &texture,
+                       GLfloat u1, GLfloat v1, GLfloat u2, GLfloat v2) noexcept;
+
+        texture_region(const std::shared_ptr<::musubi::gl::texture> &texture) noexcept;
     };
 
     class gl_texture_renderer final : public renderer {
@@ -54,6 +70,8 @@ namespace musubi::gl {
         void end_batch(bool resetTransform);
 
         void batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height);
+
+        void batch_draw_region(const texture_region &region, GLfloat x, GLfloat y, GLfloat width, GLfloat height);
     };
 }
 

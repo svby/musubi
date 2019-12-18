@@ -68,7 +68,7 @@ int main() {
                 .mode = window_mode::windowed
         });
 
-        const auto texture{std::make_shared<musubi::gl::texture>(pixmap, GL_RGBA8)};
+        const auto texture{std::make_shared<musubi::gl::texture>(pixmap, true, GL_RGBA8)};
 
         camera camera;
         camera
@@ -95,7 +95,9 @@ int main() {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 textures.begin_batch(texture);
-                textures.batch_draw_texture(-640, -360, 1280, 720);
+                musubi::gl::texture_region region(texture, (std::sin(elapsed) / 4 + 0.25f),
+                                                  (std::sin(elapsed) / 4 + 0.25f), 1, 1);
+                textures.batch_draw_region(region, -640, -360, 1280, 720);
                 textures.end_batch(false);
 
                 const auto x = 500 * std::sin(elapsed);

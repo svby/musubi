@@ -117,34 +117,41 @@ namespace musubi::gl {
             colors.clear();
         }
 
-        void batch_draw_line(const gl_shape_renderer &parent, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
-            if (!drawing) throw illegal_state_error("Cannot add operation to batch, begin has not yet been called");
-
+        void draw_line_impl(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, const glm::vec4 &lineColor) {
             vertices.push_back(x1);
             vertices.push_back(y1);
             vertices.push_back(0.0f);
             vertices.push_back(x2);
             vertices.push_back(y2);
             vertices.push_back(0.0f);
-            colors.push_back(parent.color.r);
-            colors.push_back(parent.color.g);
-            colors.push_back(parent.color.b);
-            colors.push_back(parent.color.a);
-            colors.push_back(parent.color.r);
-            colors.push_back(parent.color.g);
-            colors.push_back(parent.color.b);
-            colors.push_back(parent.color.a);
+            colors.push_back(lineColor.r);
+            colors.push_back(lineColor.g);
+            colors.push_back(lineColor.b);
+            colors.push_back(lineColor.a);
+            colors.push_back(lineColor.r);
+            colors.push_back(lineColor.g);
+            colors.push_back(lineColor.b);
+            colors.push_back(lineColor.a);
             count += 2;
         }
 
+        void batch_draw_line(const gl_shape_renderer &parent, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2) {
+            if (!drawing) throw illegal_state_error("Cannot add draw operation; batch has not been begun");
+            draw_line_impl(x1, y1, x2, y2, parent.color);
+        }
+
         void batch_draw_rectangle(const gl_shape_renderer &parent, GLfloat x, GLfloat y, GLfloat w, GLfloat h) {
-            batch_draw_line(parent, x, y, x + w, y);
-            batch_draw_line(parent, x + w, y, x + w, y + h);
-            batch_draw_line(parent, x + w, y + h, x, y + h);
-            batch_draw_line(parent, x, y + h, x, y);
+            if (!drawing) throw illegal_state_error("Cannot add draw operation; batch has not been begun");
+
+            draw_line_impl(x, y, x + w, y, parent.color);
+            draw_line_impl(x + w, y, x + w, y + h, parent.color);
+            draw_line_impl(x + w, y + h, x, y + h, parent.color);
+            draw_line_impl(x, y + h, x, y, parent.color);
         }
 
         void batch_draw_circle(const gl_shape_renderer &parent, GLfloat x, GLfloat y, GLfloat r, uint32 segments) {
+            if (!drawing) throw illegal_state_error("Cannot add draw operation; batch has not been begun");
+
             if (segments < 3u) {
                 throw std::invalid_argument("Circle segment count must be >= 3, was: "s + std::to_string(segments));
             }
@@ -155,7 +162,7 @@ namespace musubi::gl {
             for (GLuint i = 0; i < segments; angle += step, ++i) {
                 float currentX = r * std::cos(angle) + x;
                 float currentY = r * std::sin(angle) + y;
-                batch_draw_line(parent, lastX, lastY, currentX, currentY);
+                draw_line_impl(lastX, lastY, currentX, currentY, parent.color);
                 lastX = currentX;
                 lastY = currentY;
             }

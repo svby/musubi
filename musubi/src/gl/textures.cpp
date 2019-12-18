@@ -21,6 +21,8 @@ namespace {
 
     constexpr GLenum getGlFormat(musubi::pixmap_format format) {
         switch (format) {
+            case musubi::pixmap_format::rgb8:
+                return GL_RGB;
             case musubi::pixmap_format::rgba8:
                 return GL_RGBA;
             default:
@@ -35,8 +37,8 @@ namespace {
 namespace musubi::gl {
     texture::texture() noexcept = default;
 
-    texture::texture(const pixmap &source, const GLenum internalFormat) {
-        load(source, internalFormat);
+    texture::texture(const pixmap &source, bool shouldFlip, const GLenum internalFormat) {
+        load(source, shouldFlip, internalFormat);
     }
 
     texture::texture(texture &&other) noexcept
@@ -52,11 +54,15 @@ namespace musubi::gl {
             glDeleteTextures(1, &handle);
             musubi::log_i("texture") << "Deleted texture " << handle << '\n';
         }
+        flip = false;
         handle = 0;
     }
 
-    GLuint texture::load(const pixmap &source, const GLenum internalFormat) {
+    bool texture::should_flip() const noexcept { return flip; }
+
+    GLuint texture::load(const pixmap &source, bool shouldFlip, const GLenum internalFormat) {
         if (handle != 0) this->~texture();
+        flip = shouldFlip;
 
         glGenTextures(1, &handle);
         glBindTexture(GL_TEXTURE_2D, handle);
@@ -79,6 +85,13 @@ namespace musubi::gl {
     texture::operator bool() const noexcept { return handle != 0; }
 
     texture::operator GLuint() const noexcept { return handle; }
+
+    texture_region::texture_region(const std::shared_ptr<::musubi::gl::texture> &texture,
+                                   GLfloat u1, GLfloat v1, GLfloat u2, GLfloat v2) noexcept
+            : texture(texture), u1(u1), v1(v1), u2(u2), v2(v2) {}
+
+    texture_region::texture_region(const std::shared_ptr<::musubi::gl::texture> &texture) noexcept
+            : texture(texture), u1(0), v1(0), u2(1), v2(1) {}
 
     struct gl_texture_renderer::impl {
         shader_program shader{};
@@ -140,6 +153,8 @@ namespace musubi::gl {
 
         void begin_batch(std::shared_ptr<texture> texture) {
             if (drawing) throw illegal_state_error("Cannot call begin_batch twice, renderer is already drawing");
+            if (!texture) throw std::invalid_argument("Cannot begin texture batch; specified texture pointer is empty");
+            if (!*texture) throw std::invalid_argument("Cannot begin texture batch; specified texture is invalid");
             currentTexture = std::move(texture);
             drawing = true;
         }
@@ -194,9 +209,21 @@ namespace musubi::gl {
             texCoords.clear();
         }
 
-        void batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height) {
-            if (!drawing) throw illegal_state_error("Cannot add operation to batch, begin has not yet been called");
+        std::shared_ptr<texture> check_current_texture(const std::weak_ptr<texture> &weakPtr) {
+            const auto ptr = weakPtr.lock();
 
+            if (!ptr) throw std::invalid_argument("Specified texture_region refers to a deleted texture");
+            if (!currentTexture) throw assertion_error("Current texture pointer is empty");
+            if (ptr != currentTexture)
+                throw std::invalid_argument("Cannot add operation to batch; "
+                                            "the current batch texture and the specified texture_region's texture differ");
+
+            return ptr;
+        }
+
+        void draw_region_impl(bool flip,
+                              GLfloat x, GLfloat y, GLfloat width, GLfloat height,
+                              GLfloat u1, GLfloat v1, GLfloat u2, GLfloat v2) {
             // Triangle 1
             vertices.push_back(x);
             vertices.push_back(y + height);
@@ -204,12 +231,6 @@ namespace musubi::gl {
             vertices.push_back(y);
             vertices.push_back(x + width);
             vertices.push_back(y + height);
-            texCoords.push_back(0);
-            texCoords.push_back(0);
-            texCoords.push_back(0);
-            texCoords.push_back(1);
-            texCoords.push_back(1);
-            texCoords.push_back(0);
 
             // Triangle 2
             vertices.push_back(x + width);
@@ -218,14 +239,55 @@ namespace musubi::gl {
             vertices.push_back(y + height);
             vertices.push_back(x);
             vertices.push_back(y);
-            texCoords.push_back(1);
-            texCoords.push_back(1);
-            texCoords.push_back(1);
-            texCoords.push_back(0);
-            texCoords.push_back(0);
-            texCoords.push_back(1);
+
+            if (!flip) {
+                // Triangle 1
+                texCoords.push_back(u1);
+                texCoords.push_back(v2);
+                texCoords.push_back(u1);
+                texCoords.push_back(v1);
+                texCoords.push_back(u2);
+                texCoords.push_back(v2);
+
+                // Triangle 2
+                texCoords.push_back(u2);
+                texCoords.push_back(v1);
+                texCoords.push_back(u2);
+                texCoords.push_back(v2);
+                texCoords.push_back(u1);
+                texCoords.push_back(v1);
+            } else {
+                // Triangle 1
+                texCoords.push_back(u1);
+                texCoords.push_back(1 - v2);
+                texCoords.push_back(u1);
+                texCoords.push_back(1 - v1);
+                texCoords.push_back(u2);
+                texCoords.push_back(1 - v2);
+
+                // Triangle 2
+                texCoords.push_back(u2);
+                texCoords.push_back(1 - v1);
+                texCoords.push_back(u2);
+                texCoords.push_back(1 - v2);
+                texCoords.push_back(u1);
+                texCoords.push_back(1 - v1);
+            }
 
             count += 6;
+        }
+
+        void batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height) {
+            if (!drawing) throw illegal_state_error("Cannot add draw operation; batch has not been begun");
+            draw_region_impl(currentTexture->should_flip(), x, y, width, height, 0, 0, 1, 1);
+        }
+
+        void batch_draw_region(const texture_region &region,
+                               GLfloat x, GLfloat y, GLfloat width, GLfloat height) {
+            if (!drawing) throw illegal_state_error("Cannot add draw operation; batch has not been begun");
+
+            const auto texture = check_current_texture(region.texture);
+            draw_region_impl(texture->should_flip(), x, y, width, height, region.u1, region.v1, region.u2, region.v2);
         }
     };
 
@@ -244,5 +306,10 @@ namespace musubi::gl {
 
     void gl_texture_renderer::batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height) {
         pImpl->batch_draw_texture(x, y, width, height);
+    }
+
+    void gl_texture_renderer::batch_draw_region(const texture_region &region,
+                                                GLfloat x, GLfloat y, GLfloat width, GLfloat height) {
+        pImpl->batch_draw_region(region, x, y, width, height);
     }
 }
