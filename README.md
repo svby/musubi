@@ -37,6 +37,8 @@ Rolling-release distributions (such as Arch or Gentoo) are up-to-date and theref
    - rendering
      - shapes (OpenGL)
      - textures (OpenGL)
+ - lifecycle abstractions
+   - an `application` owns `window`s, which own `screen`s
 
 Currently, `libmusubi` will assume and request OpenGL 3.3 or greater by default.
 No abstractions for versions older than 3.0 are planned, due to API differences.

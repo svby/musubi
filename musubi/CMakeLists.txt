@@ -46,6 +46,7 @@ set(
         src/camera.cpp
         src/pixmap.cpp
         src/renderer.cpp
+        src/screen.cpp
 )
 
 set(
@@ -62,6 +63,7 @@ set(
         include/musubi/camera.h
         include/musubi/pixmap.h
         include/musubi/renderer.h
+        include/musubi/screen.h
 )
 
 set(

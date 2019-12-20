@@ -6,8 +6,13 @@
 #define LIBMUSUBI_WINDOW_H
 
 #include "musubi/common.h"
+#include "musubi/screen.h"
+
+#include <memory>
 
 namespace musubi {
+    struct input_state;
+
     enum class window_mode : uint8 {
         windowed,
         fullscreen,
@@ -38,6 +43,10 @@ namespace musubi {
         using id_type = uint32;
 
         virtual ~window() = default;
+
+        virtual void set_screen(std::shared_ptr<screen> newScreen) = 0;
+
+        virtual void update(const input_state &inputState) = 0;
 
         [[nodiscard]] virtual id_type get_id() const = 0;
     };

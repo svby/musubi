@@ -98,7 +98,7 @@ namespace musubi {
                     log_i("application") << "Discarded window " << id << '\n';
                 } else ++it;
 
-                // TODO window.update()
+                window->update(input);
             }
         }
 

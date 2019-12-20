@@ -76,6 +76,9 @@ namespace musubi::sdl {
                 << "Created window with GL_VERSION " << glGetString(GL_VERSION) << '\n';
     }
 
+    sdl_window::sdl_window(const musubi::window::start_info &startInfo, std::shared_ptr<screen> initialScreen)
+            : sdl_window(startInfo) { set_screen(std::move(initialScreen)); }
+
     sdl_window::sdl_window(musubi::sdl::sdl_window &&other) noexcept
             : wrapped(std::exchange(other.wrapped, nullptr)),
               context(std::exchange(other.context, nullptr)) {}
@@ -87,8 +90,33 @@ namespace musubi::sdl {
     }
 
     sdl_window::~sdl_window() {
+        if (currentScreen) currentScreen->on_detached(this);
+        currentScreen.reset();
+
         SDL_GL_DeleteContext(context);
         SDL_DestroyWindow(wrapped);
+    }
+
+    void sdl_window::set_screen(std::shared_ptr<screen> newScreen) {
+        std::shared_ptr<screen> toSwap = std::move(newScreen);
+        currentScreen.swap(toSwap);
+
+        // Trigger event listeners
+        if (toSwap) toSwap->on_detached(this);
+        currentScreen->on_attached(this);
+    }
+
+    void sdl_window::update(const input_state &) {
+        const auto now = clock_type::now();
+        const auto dt = std::chrono::duration_cast<delta_type>(now - lastTime).count();
+        lastTime = now;
+        if (currentScreen) {
+            make_current();
+            // Extend this screen's lifetime in case on_update sets another screen
+            std::shared_ptr<screen> copy(currentScreen);
+            currentScreen->on_update(dt);
+            flip();
+        }
     }
 
     sdl_window::id_type sdl_window::get_id() const { return SDL_GetWindowID(wrapped); }
