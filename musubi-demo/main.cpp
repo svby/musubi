@@ -1,6 +1,6 @@
 #include <musubi/application.h>
 #include <musubi/pixmap.h>
-#include <musubi/gl/shaders.h>
+#include <musubi/screen.h>
 #include <musubi/gl/shapes.h>
 #include <musubi/gl/textures.h>
 #include <musubi/sdl/sdl_init.h>
@@ -36,112 +36,143 @@ constexpr uint32 hsv_to_rgba(float hue, float saturation, float value) {
     );
 }
 
-int main() {
-    {
-        buffer_pixmap<pixmap_format::rgba8> pixmap(1280, 720);
+struct empty_test_screen final : basic_screen {
+    void on_update(float dt) override {
+        glClearColor(0.5, 0.5, 0.5, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+};
 
-        const auto midX = pixmap.get_width() / 2;
-        const auto midY = pixmap.get_height() / 2;
-        const auto minDim = std::min(pixmap.get_width(), pixmap.get_height());
-        const auto radius = std::max(minDim - 100.0f, 100.0f);
+struct recur_test_screen final : basic_screen {
+    void on_update(float dt) override {
+        get_current_window()->set_screen(std::make_shared<recur_test_screen>());
+    }
+};
 
-        for (uint32 x = 0; x < pixmap.get_width(); ++x) {
-            for (uint32 y = 0; y < pixmap.get_height(); ++y) {
-                const float dX = static_cast<float>(x) - midX, dY = static_cast<float>(y) - midY;
+struct clear_test_screen final : basic_screen {
+    using clock_type = steady_clock;
+    using delta_type = duration<float>;
 
-                const auto hue = std::atan2(-dY, dX);
-                const auto saturation =
-                        std::clamp(std::sqrt(dX * dX + dY * dY) / radius, 0.0f, 1.0f);
+    time_point<clock_type> startTime{};
 
-                pixmap.set_pixel(x, y, hsv_to_rgba(hue, saturation, 1));
+    void on_update(float dt) override {
+        const auto elapsed = duration_cast<delta_type>(clock_type::now() - startTime).count();
+        const auto phaseShift = 2.0f / 3.0f * pi<float>;
+
+        const auto r = std::sin(elapsed + 0.0f * phaseShift) / 2.0f + 0.5f;
+        const auto g = std::sin(elapsed + 1.0f * phaseShift) / 2.0f + 0.5f;
+        const auto b = std::sin(elapsed + 2.0f * phaseShift) / 2.0f + 0.5f;
+
+        glClearColor(r, g, b, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+    }
+};
+
+struct renderer_test_screen final : basic_screen {
+    using clock_type = steady_clock;
+    using delta_type = duration<float>;
+
+    time_point<clock_type> startTime{};
+
+    std::shared_ptr<gl::texture> texture{};
+
+    gl::gl_shape_renderer shapes{};
+    gl::gl_texture_renderer textures{};
+
+    void on_attached(window *window) override {
+        basic_screen::on_attached(window);
+
+        {
+            buffer_pixmap<pixmap_format::rgba8> pixmap(1280, 720);
+            const auto radius = std::max(std::min(pixmap.get_width(), pixmap.get_height()) - 100.0f, 100.0f);
+            for (uint32 x = 0; x < pixmap.get_width(); ++x) {
+                for (uint32 y = 0; y < pixmap.get_height(); ++y) {
+                    const float dX = static_cast<float>(x) - pixmap.get_width() / 2.0f,
+                            dY = static_cast<float>(y) - pixmap.get_height() / 2.0f;
+
+                    const auto hue = std::atan2(-dY, dX);
+                    const auto saturation =
+                            std::clamp(std::sqrt(dX * dX + dY * dY) / radius, 0.0f, 1.0f);
+
+                    pixmap.set_pixel(x, y, hsv_to_rgba(hue, saturation, 1));
+                }
             }
+
+            texture = std::make_shared<gl::texture>(pixmap, true, GL_RGBA8);
         }
-
-        sdl::scoped_init disposer;
-
-        application demo;
-
-        const auto windowPtr = demo.create_window<sdl::sdl_window>(window::start_info{
-                .title = "musubi_demo",
-                .width = 1280,
-                .height = 720,
-                .mode = window_mode::windowed
-        });
-
-        const auto texture{std::make_shared<musubi::gl::texture>(pixmap, true, GL_RGBA8)};
 
         camera camera;
         camera
                 .set_viewport_ortho(1280, 720)
                 .set_position(0, 0);
 
-        gl::gl_shape_renderer shapes;
         shapes.init();
-
-        gl::gl_texture_renderer textures;
         textures.init();
-
         shapes.camera = textures.camera = camera;
-
-        const auto start = high_resolution_clock::now();
-        demo.get_looper().add_action([&](auto &token) {
-            const auto elapsed = duration_cast<duration<float>>(high_resolution_clock::now() - start).count();
-            const auto SHIFT = 2.0f / 3.0f * pi<float>;
-
-            if (auto window = windowPtr.lock()) {
-                window->make_current();
-
-                glClearColor(0.5f, 0.5f, 0.5f, 1);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-                textures.begin_batch(texture);
-                musubi::gl::texture_region region(texture, (std::sin(elapsed) / 4 + 0.25f),
-                                                  (std::sin(elapsed) / 4 + 0.25f), 1, 1);
-                textures.batch_draw_region(region, -640, -360, 1280, 720);
-                textures.end_batch(false);
-
-                const auto x = 500 * std::sin(elapsed);
-                const auto y = 220 * std::cos(2 * pi<float> * elapsed);
-                constexpr auto hl = 50.0f;
-                const auto squareTransform = rotate(translate(identity<mat4>(), {x, y, 0}), 4 * elapsed,
-                                                    {0, 0, 1});
-
-                textures.begin_batch(texture);
-                textures.transform = squareTransform;
-                textures.batch_draw_texture(-hl, -hl, hl * 2, hl * 2);
-                textures.end_batch(true);
-
-                shapes.begin_batch();
-                shapes.color = {0, 0, 0, 1};
-                shapes.transform = squareTransform;
-                shapes.batch_draw_line(-hl, -hl, -hl, hl);
-                shapes.batch_draw_line(-hl, hl, hl, hl);
-                shapes.batch_draw_line(hl, hl, hl, -hl);
-                shapes.batch_draw_line(hl, -hl, -hl, -hl);
-                shapes.end_batch(true);
-
-                shapes.begin_batch();
-                shapes.color = {
-                        std::sin(elapsed + 0.0f * SHIFT) / 2.0f + 0.5f,
-                        std::sin(elapsed + 1.0f * SHIFT) / 2.0f + 0.5f,
-                        std::sin(elapsed + 2.0f * SHIFT) / 2.0f + 0.5f,
-                        1
-                };
-                shapes.batch_draw_circle(0, 0, 300);
-                shapes.end_batch(false);
-
-                shapes.begin_batch();
-                shapes.color = {0, 1, 1, 1};
-                shapes.transform = rotate(identity<mat4>(), elapsed, {0, 0, 1});
-                shapes.batch_draw_rectangle(0, -50, 300, 100);
-                shapes.end_batch(true);
-
-                window->flip();
-            }
-        });
-
-        demo.get_looper().loop();
     }
 
-    return 0;
+    void on_update(float dt) override {
+        const auto elapsed = duration_cast<delta_type>(clock_type::now() - startTime).count();
+
+        glClearColor(0.5, 0.5, 0.5, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        textures.begin_batch(texture);
+        musubi::gl::texture_region region(texture, (std::sin(elapsed) / 4 + 0.25f),
+                                          (std::sin(elapsed) / 4 + 0.25f), 1, 1);
+        textures.batch_draw_region(region, -640, -360, 1280, 720);
+        textures.end_batch(false);
+
+        const auto x = 500 * std::sin(elapsed);
+        const auto y = 220 * std::cos(2 * pi<float> * elapsed);
+        constexpr auto hl = 50.0f;
+        const auto squareTransform = rotate(translate(identity<mat4>(), {x, y, 0}), 4 * elapsed,
+                                            {0, 0, 1});
+
+        textures.begin_batch(texture);
+        textures.transform = squareTransform;
+        textures.batch_draw_texture(-hl, -hl, hl * 2, hl * 2);
+        textures.end_batch(true);
+
+        shapes.begin_batch();
+        shapes.color = {0, 0, 0, 1};
+        shapes.transform = squareTransform;
+        shapes.batch_draw_line(-hl, -hl, -hl, hl);
+        shapes.batch_draw_line(-hl, hl, hl, hl);
+        shapes.batch_draw_line(hl, hl, hl, -hl);
+        shapes.batch_draw_line(hl, -hl, -hl, -hl);
+        shapes.end_batch(true);
+
+        const auto phaseShift = 2.0f / 3.0f * pi<float>;
+        shapes.begin_batch();
+        shapes.color = {
+                std::sin(elapsed + 0.0f * phaseShift) / 2.0f + 0.5f,
+                std::sin(elapsed + 1.0f * phaseShift) / 2.0f + 0.5f,
+                std::sin(elapsed + 2.0f * phaseShift) / 2.0f + 0.5f,
+                1
+        };
+        shapes.batch_draw_circle(0, 0, 300);
+        shapes.end_batch(false);
+
+        shapes.begin_batch();
+        shapes.color = {0, 1, 1, 1};
+        shapes.transform = rotate(identity<mat4>(), elapsed, {0, 0, 1});
+        shapes.batch_draw_rectangle(0, -50, 300, 100);
+        shapes.end_batch(true);
+    }
+};
+
+int main() {
+    sdl::scoped_init disposer;
+
+    application demo;
+
+    const auto windowPtr = demo.create_window<sdl::sdl_window>(window::start_info{
+            .title = "musubi_demo",
+            .width = 1280,
+            .height = 720,
+            .mode = window_mode::windowed
+    }, std::make_shared<renderer_test_screen>());
+
+    demo.get_looper().loop();
 }
