@@ -17,3 +17,4 @@ cmake-build-*/
 
 # Local build directory
 build/
+local/
