@@ -45,7 +45,7 @@ struct empty_test_screen final : basic_screen {
 
 struct recur_test_screen final : basic_screen {
     void on_update(float dt) override {
-        get_current_window()->set_screen(std::make_shared<recur_test_screen>());
+        get_current_window()->set_screen(std::make_unique<recur_test_screen>());
     }
 };
 
@@ -172,7 +172,7 @@ int main() {
             .width = 1280,
             .height = 720,
             .mode = window_mode::windowed
-    }, std::make_shared<renderer_test_screen>());
+    }, std::make_unique<renderer_test_screen>());
 
     demo.get_looper().loop();
 }

@@ -44,7 +44,7 @@ namespace musubi {
 
         virtual ~window() = default;
 
-        virtual void set_screen(std::shared_ptr<screen> newScreen) = 0;
+        virtual void set_screen(std::unique_ptr<screen> newScreen) = 0;
 
         virtual void update(const input_state &inputState) = 0;
 

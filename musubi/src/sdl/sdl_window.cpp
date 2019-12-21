@@ -76,7 +76,7 @@ namespace musubi::sdl {
                 << "Created window with GL_VERSION " << glGetString(GL_VERSION) << '\n';
     }
 
-    sdl_window::sdl_window(const musubi::window::start_info &startInfo, std::shared_ptr<screen> initialScreen)
+    sdl_window::sdl_window(const musubi::window::start_info &startInfo, std::unique_ptr<screen> initialScreen)
             : sdl_window(startInfo) { set_screen(std::move(initialScreen)); }
 
     sdl_window::sdl_window(musubi::sdl::sdl_window &&other) noexcept
@@ -97,7 +97,7 @@ namespace musubi::sdl {
         SDL_DestroyWindow(wrapped);
     }
 
-    void sdl_window::set_screen(std::shared_ptr<screen> newScreen) {
+    void sdl_window::set_screen(std::unique_ptr<screen> newScreen) {
         std::shared_ptr<screen> toSwap = std::move(newScreen);
         currentScreen.swap(toSwap);
 

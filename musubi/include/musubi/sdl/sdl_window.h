@@ -27,7 +27,7 @@ namespace musubi::sdl {
 
         explicit sdl_window(const musubi::window::start_info &startInfo);
 
-        sdl_window(const musubi::window::start_info &startInfo, std::shared_ptr<screen> initialScreen);
+        sdl_window(const musubi::window::start_info &startInfo, std::unique_ptr<screen> initialScreen);
 
         sdl_window(sdl_window &&other) noexcept;
 
@@ -35,11 +35,11 @@ namespace musubi::sdl {
 
         ~sdl_window() override;
 
-        void set_screen(std::shared_ptr<screen> newScreen) final;
+        void set_screen(std::unique_ptr<screen> newScreen) final;
 
         template<typename Screen, typename... ScreenArgs>
         std::enable_if_t<std::is_base_of_v<screen, Screen>, void>
-        set_screen(ScreenArgs &&...args) { set_screen(std::make_shared<Screen>(std::forward<ScreenArgs>(args)...)); }
+        set_screen(ScreenArgs &&...args) { set_screen(std::make_unique<Screen>(std::forward<ScreenArgs>(args)...)); }
 
         void update(const input_state &inputState) override;
 
