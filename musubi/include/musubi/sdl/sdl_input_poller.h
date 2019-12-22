@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/24/19.
 //
 
-#ifndef LIBMUSUBI_SDL_SDL_INPUT_POLLER_H
-#define LIBMUSUBI_SDL_SDL_INPUT_POLLER_H
+#ifndef MUSUBI_SDL_SDL_INPUT_POLLER_H
+#define MUSUBI_SDL_SDL_INPUT_POLLER_H
 
 #include "musubi/input.h"
 
@@ -14,4 +14,4 @@ namespace musubi::sdl {
     };
 }
 
-#endif //LIBMUSUBI_SDL_SDL_INPUT_POLLER_H
+#endif //MUSUBI_SDL_SDL_INPUT_POLLER_H

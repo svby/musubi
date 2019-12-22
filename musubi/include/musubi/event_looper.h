@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/24/19.
 //
 
-#ifndef LIBMUSUBI_EVENT_LOOPER_H
-#define LIBMUSUBI_EVENT_LOOPER_H
+#ifndef MUSUBI_EVENT_LOOPER_H
+#define MUSUBI_EVENT_LOOPER_H
 
 #include <functional>
 #include <vector>
@@ -50,4 +50,4 @@ namespace musubi {
     };
 }
 
-#endif //LIBMUSUBI_EVENT_LOOPER_H
+#endif //MUSUBI_EVENT_LOOPER_H

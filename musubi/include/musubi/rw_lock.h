@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/23/19.
 //
 
-#ifndef LIBMUSUBI_UTIL_RW_LOCK_H
-#define LIBMUSUBI_UTIL_RW_LOCK_H
+#ifndef MUSUBI_UTIL_RW_LOCK_H
+#define MUSUBI_UTIL_RW_LOCK_H
 
 #include <shared_mutex>
 
@@ -22,4 +22,4 @@ namespace musubi {
     };
 }
 
-#endif //LIBMUSUBI_UTIL_RW_LOCK_H
+#endif //MUSUBI_UTIL_RW_LOCK_H

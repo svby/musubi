@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/22/19.
 //
 
-#ifndef LIBMUSUBI_APPLICATION_H
-#define LIBMUSUBI_APPLICATION_H
+#ifndef MUSUBI_APPLICATION_H
+#define MUSUBI_APPLICATION_H
 
 #include "musubi/common.h"
 #include "musubi/event_looper.h"
@@ -108,4 +108,4 @@ namespace musubi {
     };
 }
 
-#endif //LIBMUSUBI_APPLICATION_H
+#endif //MUSUBI_APPLICATION_H

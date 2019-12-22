@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/27/19.
 //
 
-#ifndef LIBMUSUBI_EXCEPTION_H
-#define LIBMUSUBI_EXCEPTION_H
+#ifndef MUSUBI_EXCEPTION_H
+#define MUSUBI_EXCEPTION_H
 
 #include <exception>
 #include <stdexcept>
@@ -27,4 +27,4 @@ namespace musubi {
     };
 }
 
-#endif //LIBMUSUBI_EXCEPTION_H
+#endif //MUSUBI_EXCEPTION_H

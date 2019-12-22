@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/23/19.
 //
 
-#ifndef LIBMUSUBI_WINDOW_H
-#define LIBMUSUBI_WINDOW_H
+#ifndef MUSUBI_WINDOW_H
+#define MUSUBI_WINDOW_H
 
 #include "musubi/common.h"
 #include "musubi/screen.h"
@@ -52,4 +52,4 @@ namespace musubi {
     };
 }
 
-#endif //LIBMUSUBI_WINDOW_H
+#endif //MUSUBI_WINDOW_H

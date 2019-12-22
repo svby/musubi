@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/27/19.
 //
 
-#ifndef LIBMUSUBI_SDL_SDL_INIT_H
-#define LIBMUSUBI_SDL_SDL_INIT_H
+#ifndef MUSUBI_SDL_SDL_INIT_H
+#define MUSUBI_SDL_SDL_INIT_H
 
 namespace musubi::sdl {
     void init();
@@ -17,4 +17,4 @@ namespace musubi::sdl {
     };
 }
 
-#endif //LIBMUSUBI_SDL_SDL_INIT_H
+#endif //MUSUBI_SDL_SDL_INIT_H

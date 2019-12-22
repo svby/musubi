@@ -2,8 +2,8 @@
 // Created by stuhlmeier on 11/23/19.
 //
 
-#ifndef LIBMUSUBI_INPUT_H
-#define LIBMUSUBI_INPUT_H
+#ifndef MUSUBI_INPUT_H
+#define MUSUBI_INPUT_H
 
 #include "musubi/common.h"
 #include "musubi/window.h"
@@ -28,4 +28,4 @@ namespace musubi {
     };
 }
 
-#endif //LIBMUSUBI_INPUT_H
+#endif //MUSUBI_INPUT_H
