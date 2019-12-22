@@ -21,6 +21,8 @@ namespace {
 
     constexpr GLenum getGlFormat(musubi::pixmap_format format) {
         switch (format) {
+            case musubi::pixmap_format::r8:
+                return GL_RED;
             case musubi::pixmap_format::rgb8:
                 return GL_RGB;
             case musubi::pixmap_format::rgba8:
@@ -66,6 +68,7 @@ namespace musubi::gl {
 
         glGenTextures(1, &handle);
         glBindTexture(GL_TEXTURE_2D, handle);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);

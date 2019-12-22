@@ -17,7 +17,7 @@ namespace musubi {
     using std::byte;
 
     enum class pixmap_format : uint8 {
-        rgb8, rgba8
+        r8, rgb8, rgba8
     };
 
     class pixmap {
@@ -37,6 +37,13 @@ namespace musubi {
 
     template<pixmap_format format>
     struct pixmap_traits;
+
+    template<>
+    struct pixmap_traits<pixmap_format::r8> {
+        using element_type = uint8;
+
+        static constexpr uint8 get_bytes_per_pixel() { return 1; }
+    };
 
     template<>
     struct pixmap_traits<pixmap_format::rgb8> {
