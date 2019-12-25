@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 12/13/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 13 December 2019
 
 #include <musubi/gl/textures.h>
 
@@ -85,9 +85,13 @@ namespace musubi::gl {
         return handle;
     }
 
-    texture::operator bool() const noexcept { return handle != 0; }
+    bool texture::is_valid() const noexcept { return handle != 0; }
 
-    texture::operator GLuint() const noexcept { return handle; }
+    texture::operator bool() const noexcept(noexcept(is_valid())) { return is_valid(); }
+
+    GLuint texture::get_name() const noexcept { return handle; }
+
+    texture::operator GLuint() const noexcept(noexcept(get_name())) { return get_name(); }
 
     texture_region::texture_region(const std::shared_ptr<::musubi::gl::texture> &texture,
                                    GLfloat u1, GLfloat v1, GLfloat u2, GLfloat v2) noexcept
