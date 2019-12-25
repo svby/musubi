@@ -86,15 +86,33 @@ namespace musubi::gl {
         bool flip{false};
     };
 
+    /// @brief A rectangular region of a @ref texture.
+    /// @details
+    /// This class contains a weak pointer to a @ref texture along with two pairs of UV texture coordinates
+    /// that define the offset and extent of the texture region.
+    /// @see texture
     struct texture_region final {
     public:
+        /// A weak pointer to the associated @ref texture.
         std::weak_ptr<texture> texture;
-        GLfloat u1, v1, u2, v2;
 
+        ///@{ @name Texture coordinates
+        /// The two pairs of UV texture coordinates that define this texture region.
+        GLfloat u1, ///< @details The U coordinate of point 1.
+                v1, ///< @details The V coordinate of point 1.
+                u2, ///< @details The U coordinate of point 2.
+                v2; ///< @details The V coordinate of point 2.
+        ///@}
+
+        /// @brief Constructs a texture region from the specified texture and texture coordinates.
+        /// @param[in] texture a shared pointer to the associated @ref texture
+        /// @param[in] u1, v1, u2, v2 the two pairs of UV texture coordinates that define this texture region
         texture_region(const std::shared_ptr<::musubi::gl::texture> &texture,
                        GLfloat u1, GLfloat v1, GLfloat u2, GLfloat v2) noexcept;
 
-        texture_region(const std::shared_ptr<::musubi::gl::texture> &texture) noexcept;
+        /// @brief Constructs a texture region spanning the entire specified texture.
+        /// @param[in] texture a shared pointer to the associated @ref texture
+        explicit texture_region(const std::shared_ptr<::musubi::gl::texture> &texture) noexcept;
     };
 
     class gl_texture_renderer final : public renderer {
