@@ -17,8 +17,6 @@
 namespace {
     using namespace std::literals;
 
-    constexpr glm::mat4 IDENTITY{glm::identity<glm::mat4>()};
-
     constexpr GLenum getGlFormat(musubi::pixmap_format format) {
         switch (format) {
             case musubi::pixmap_format::r8:
@@ -39,7 +37,7 @@ namespace {
 namespace musubi::gl {
     texture::texture() noexcept = default;
 
-    texture::texture(const pixmap &source, bool shouldFlip, const GLenum internalFormat) {
+    texture::texture(const pixmap &source, bool shouldFlip, GLenum internalFormat) {
         load(source, shouldFlip, internalFormat);
     }
 
@@ -93,12 +91,12 @@ namespace musubi::gl {
 
     texture::operator GLuint() const noexcept(noexcept(get_name())) { return get_name(); }
 
-    texture_region::texture_region(const std::shared_ptr<::musubi::gl::texture> &texture,
+    texture_region::texture_region(std::weak_ptr<::musubi::gl::texture> texture,
                                    GLfloat u1, GLfloat v1, GLfloat u2, GLfloat v2) noexcept
-            : texture(texture), u1(u1), v1(v1), u2(u2), v2(v2) {}
+            : texture(std::move(texture)), u1(u1), v1(v1), u2(u2), v2(v2) {}
 
-    texture_region::texture_region(const std::shared_ptr<::musubi::gl::texture> &texture) noexcept
-            : texture(texture), u1(0), v1(0), u2(1), v2(1) {}
+    texture_region::texture_region(std::weak_ptr<::musubi::gl::texture> texture) noexcept
+            : texture(std::move(texture)), u1(0), v1(0), u2(1), v2(1) {}
 
     struct gl_texture_renderer::impl {
         shader_program shader{};
@@ -113,7 +111,7 @@ namespace musubi::gl {
         std::vector<GLfloat> texCoords{};
 
         bool drawing{false};
-        std::shared_ptr<texture> currentTexture;
+        std::shared_ptr<texture> currentTexture{nullptr};
 
         LIBMUSUBI_DELCP(impl)
 
@@ -308,7 +306,7 @@ namespace musubi::gl {
 
     void gl_texture_renderer::end_batch(bool resetTransform) {
         pImpl->end_batch(*this);
-        if (resetTransform) transform = IDENTITY;
+        if (resetTransform) transform = glm::mat4{1};
     }
 
     void gl_texture_renderer::batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height) {

@@ -106,16 +106,20 @@ namespace musubi::gl {
         ///@}
 
         /// @brief Constructs a texture region from the specified texture and texture coordinates.
-        /// @param[in] texture a shared pointer to the associated @ref texture
+        /// @param[in] texture a pointer to the associated @ref texture
         /// @param[in] u1, v1, u2, v2 the two pairs of UV texture coordinates that define this texture region
-        texture_region(const std::shared_ptr<::musubi::gl::texture> &texture,
+        texture_region(std::weak_ptr<::musubi::gl::texture> texture,
                        GLfloat u1, GLfloat v1, GLfloat u2, GLfloat v2) noexcept;
 
         /// @brief Constructs a texture region spanning the entire specified texture.
-        /// @param[in] texture a shared pointer to the associated @ref texture
-        explicit texture_region(const std::shared_ptr<::musubi::gl::texture> &texture) noexcept;
+        /// @param[in] texture a pointer to the associated @ref texture
+        explicit texture_region(std::weak_ptr<::musubi::gl::texture> texture) noexcept;
     };
 
+    /// @brief A @ref renderer for @ref texture "textures" and @ref texture_region "texture regions".
+    /// @details
+    /// This renderer processes _batches_ of draw operations.
+    /// All draw operations performed in the same batch use the same texture.
     class gl_texture_renderer final : public renderer {
     private:
         LIBMUSUBI_PIMPL
@@ -123,18 +127,45 @@ namespace musubi::gl {
     public:
         LIBMUSUBI_DELCP(gl_texture_renderer)
 
+        /// @copydoc renderer()
         gl_texture_renderer() noexcept;
 
+        /// @copydoc ~renderer()
         ~gl_texture_renderer() noexcept override;
 
+        /// @copydoc renderer::init()
+        /// @details This compiles the default texture shader program and initializes a vertex array.
         void init() override;
 
+        /// @brief Begins a texture batch.
+        /// @details Prepares an empty triangle mesh for rendering and sets the batch texture.
+        /// @param[in] texture the batch texture
+        /// @throw illegal_state_error if there is already an active batch
+        /// @throw invalid_argument if the specified texture pointer is empty,
+        /// or its content is not a valid texture
         void begin_batch(std::shared_ptr<texture> texture);
 
+        /// @brief Finalizes and renders the current batch.
+        /// @details
+        /// Loads the current triangle mesh into a vertex buffer, draws it and disposes it,
+        /// then clears the batch texture.
+        /// @param[in] resetTransform whether to reset the transformation matrix after finishing the batch
+        /// @throw illegal_state_error if there is no active batch
         void end_batch(bool resetTransform);
 
+        /// @brief Fully draws the current batch texture.
+        /// @param[in] x, y the position at which to draw the texture
+        /// @param[in] width, height the desired size of the texture
+        /// @throw illegal_state_error if there is no active batch
         void batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height);
 
+        /// @brief Draws a region of the current batch texture.
+        /// @param[in] region the texture region to draw
+        /// @param[in] x, y the position at which to draw the texture region
+        /// @param[in] width,height the dimensions of the texture region
+        /// @throw illegal_state_error if there is no active batch
+        /// @throw invalid_argument if the specified texture region refers to a deleted texture,
+        /// or if it does not refer to the current batch texture
         void batch_draw_region(const texture_region &region, GLfloat x, GLfloat y, GLfloat width, GLfloat height);
     };
 }
