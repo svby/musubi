@@ -47,6 +47,7 @@ set(
         src/pixmap.cpp
         src/renderer.cpp
         src/screen.cpp
+        src/asset_registry.cpp
 )
 
 set(
@@ -64,6 +65,7 @@ set(
         include/musubi/pixmap.h
         include/musubi/renderer.h
         include/musubi/screen.h
+        include/musubi/asset_registry.h
 )
 
 set(
@@ -77,7 +79,7 @@ add_library(
         ${musubi_private_headers}
 )
 target_compile_features(musubi PRIVATE cxx_std_17)
-target_compile_options(musubi PRIVATE -Wall -Wextra -pedantic -Werror)
+target_compile_options(musubi PRIVATE -Wall -Wextra -pedantic)
 
 find_package(SDL2 REQUIRED)
 target_link_libraries(musubi SDL2::SDL2)
@@ -87,6 +89,13 @@ target_include_directories(musubi PRIVATE ${Epoxy_INCLUDE_DIRS})
 target_link_libraries(musubi ${Epoxy_LIBRARIES})
 
 # GLM required, but it is header-only
+
+find_package(LibArchive REQUIRED)
+target_include_directories(musubi PRIVATE ${LibArchive_INCLUDE_DIRS})
+target_link_libraries(musubi ${LibArchive_LIBRARIES})
+
+find_package(nlohmann_json REQUIRED)
+target_link_libraries(musubi nlohmann_json::nlohmann_json)
 
 target_include_directories(musubi PUBLIC include/)
 target_include_directories(musubi PRIVATE src/)

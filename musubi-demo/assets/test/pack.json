@@ -1,0 +1,8 @@
+{
+  "name": "test",
+  "description": "Test asset pack",
+  "contents": [
+    "sample.png",
+    "test.txt"
+  ]
+}

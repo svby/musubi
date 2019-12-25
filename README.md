@@ -1,6 +1,6 @@
 # musubi
 
-Graphics wrapper in modern C++. Written from scratch for maximum usability.
+Simple application framework in modern C++. Written from scratch for maximum usability.
 
 ## Building
 
@@ -39,6 +39,8 @@ Rolling-release distributions (such as Arch or Gentoo) are up-to-date and theref
      - textures (OpenGL)
  - lifecycle abstractions
    - an `application` owns `window`s, which own `screen`s
+ - asset packing & managing
+   - assets are automatically packed in `xz` archives by `mpack.py`, and can be loaded and read at runtime
 
 Currently, `libmusubi` will assume and request OpenGL 3.3 or greater by default.
 No abstractions for versions older than 3.0 are planned, due to API differences.
@@ -64,5 +66,7 @@ Licenses for its source dependencies are located in `licenses/`.
  - [SDL 2](https://www.libsdl.org/) (zlib)
  - [Epoxy](https://github.com/anholt/libepoxy) (MIT)
  - [GLM](https://github.com/g-truc/glm) (Happy Bunny)
+ - [libarchive](https://github.com/libarchive/libarchive/)
+ - [`nlohmann::json`](https://github.com/nlohmann/json) (MIT)
 
 [arch-sdlcmake]: https://bbs.archlinux.org/viewtopic.php?pid=1777965#p1777965

@@ -23,3 +23,13 @@ target_link_libraries(musubi_demo ${Epoxy_LIBRARIES})
 
 find_package(Threads REQUIRED)
 target_link_libraries(musubi_demo Threads::Threads)
+
+file(GLOB_RECURSE musubi_demo_pack_files assets/**/pack.json)
+
+add_custom_target(
+        musubi_demo_assets
+        DEPENDS ${musubi_demo_pack_files}
+        COMMAND ${CMAKE_SOURCE_DIR}/tools/mpack.py -v -r ${CMAKE_CURRENT_SOURCE_DIR}/assets/
+)
+
+add_dependencies(musubi_demo musubi_demo_assets)

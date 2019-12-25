@@ -25,6 +25,16 @@ namespace musubi {
     public:
         using std::runtime_error::runtime_error;
     };
+
+    class resource_read_error : public std::runtime_error {
+    public:
+        using std::runtime_error::runtime_error;
+    };
+
+    class archive_read_error : public resource_read_error {
+    public:
+        using resource_read_error::resource_read_error;
+    };
 }
 
 #endif //MUSUBI_EXCEPTION_H
