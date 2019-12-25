@@ -84,6 +84,7 @@ namespace musubi {
             height = other.height;
             buffer = std::move(other.buffer);
             initialized = other.initialized;
+            return *this;
         }
 
         ~buffer_pixmap() override = default;
