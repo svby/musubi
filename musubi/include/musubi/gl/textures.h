@@ -61,6 +61,7 @@ namespace musubi::gl {
         GLuint load(const pixmap &source, bool shouldFlip = false, GLenum internalFormat = GL_RGBA8);
 
         /// @brief Checks if this texture should be vertically flipped prior to rendering.
+        /// @details If this is not a valid texture, this function returns `false`.
         /// @return whether this texture should be vertically flipped prior to rendering
         /// @see texture
         [[nodiscard]] bool should_flip() const noexcept;

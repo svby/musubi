@@ -52,7 +52,7 @@ namespace musubi::gl {
     }
 
     texture::~texture() noexcept {
-        if (operator bool()) {
+        if (is_valid()) {
             glDeleteTextures(1, &handle);
             musubi::log_i("texture") << "Deleted texture " << handle << '\n';
         }
@@ -60,9 +60,9 @@ namespace musubi::gl {
         handle = 0;
     }
 
-    bool texture::should_flip() const noexcept { return flip; }
+    bool texture::should_flip() const noexcept { return is_valid() && flip; }
 
-    GLuint texture::load(const pixmap &source, bool shouldFlip, const GLenum internalFormat) {
+    GLuint texture::load(const pixmap &source, bool shouldFlip, GLenum internalFormat) {
         if (handle != 0) this->~texture();
         flip = shouldFlip;
 
