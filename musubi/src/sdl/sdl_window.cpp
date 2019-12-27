@@ -3,7 +3,7 @@
 //
 
 #include <musubi/exception.h>
-#include <musubi/sdl/sdl_exception.h>
+#include <musubi/sdl/sdl_error.h>
 #include <musubi/sdl/sdl_window.h>
 
 #include <epoxy/gl.h>
@@ -67,10 +67,10 @@ namespace musubi::sdl {
                 | (startInfo.resizable ? SDL_WINDOW_RESIZABLE : 0)
                 | windowModeFlags(startInfo.mode)
         );
-        if (wrapped == nullptr) throw sdl_exception("Could not create SDL window: "s + SDL_GetError());
+        if (wrapped == nullptr) throw sdl_error("Could not create SDL window: "s + SDL_GetError());
 
         context = SDL_GL_CreateContext(wrapped);
-        if (context == nullptr) throw sdl_exception("Could not create GL context: "s + SDL_GetError());
+        if (context == nullptr) throw sdl_error("Could not create GL context: "s + SDL_GetError());
 
         log_i("sdl_window")
                 << "Created window with GL_VERSION " << glGetString(GL_VERSION) << '\n';

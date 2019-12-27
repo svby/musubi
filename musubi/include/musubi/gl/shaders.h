@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 12/7/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 7 December 2019
 
 #ifndef MUSUBI_GL_SHADERS_H
 #define MUSUBI_GL_SHADERS_H
@@ -17,10 +17,21 @@
 namespace musubi::gl {
     using std::nullopt;
 
+    /// @brief An @ref application_error indicating that an error occurred during shader compilation/linking.
+    /// @details This exception stores @ref get_shader_log "the error log" of the affected shader or program.
     class shader_error : public application_error {
     public:
+        /// @brief Constructs a @ref shader_error from the given error message and shader log.
+        /// @details
+        /// The final error string is composed of the provided error message and,
+        /// if present, the optional shader log contents.
+        ///
+        /// @param[in] what the error message
+        /// @param[in] shaderLog the optional contents of the shader or program log
         explicit shader_error(const std::string &what, std::optional<std::string> shaderLog = nullopt) noexcept;
 
+        /// @brief Retrieves the contents of the associated shader or program log, if present.
+        /// @return the optional contents of the associated shader or program log
         [[nodiscard]] const std::optional<std::string> &get_shader_log() const noexcept;
 
     private:

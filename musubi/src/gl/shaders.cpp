@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 12/7/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 7 December 2019
 
 #include <musubi/gl/shaders.h>
 
