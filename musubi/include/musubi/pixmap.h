@@ -121,15 +121,16 @@ namespace musubi {
         /// @details This does not allocate any memory.
         /// @param[in] width, height the pixmap size
         buffer_pixmap(uint32 width, uint32 height) noexcept
-                : initialized(false), width(width), height(height) {}
+                : width(width), height(height), buffer(nullptr) {}
 
         /// @brief Constructs a buffer_pixmap with the specified size, copying the specified buffer.
         /// @param[in] width, height the pixmap size
         /// @param[in] buffer the source buffer to load
         buffer_pixmap(uint32 width, uint32 height, const byte *buffer)
-                : width(width), height(height),
-                  buffer(buffer, buffer + get_buffer_size(width, height)),
-                  initialized(true) {}
+                : width(width), height(height) {
+            ensure_buffer();
+            std::copy(buffer, buffer + get_buffer_size(width, height), this->buffer.get());
+        }
 
         /// @brief Constructs a buffer_pixmap with the specified size, copying the specified range.
         /// @tparam InputIterator the range iterator type
@@ -137,16 +138,16 @@ namespace musubi {
         /// @param[in] first, last the data range to copy from
         template<typename InputIterator>
         buffer_pixmap(uint32 width, uint32 height, InputIterator first, InputIterator last)
-                : width(width), height(height), buffer(first, last), initialized(true) {}
+                : width(width), height(height) {
+            ensure_buffer();
+            std::copy(first, last, buffer.get());
+        }
 
         /// @details Move constructor; `other` becomes an empty but valid pixmap.
         /// @param[in,out] other the pixmap to move from
         buffer_pixmap(buffer_pixmap &&other) noexcept
                 : width(other.width), height(other.height),
-                  buffer(std::move(other.buffer)),
-                  initialized(other.initialized) {
-            other.buffer.clear();
-        }
+                  buffer(std::move(other.buffer)) {}
 
         /// @details Move assignment operator; `other` becomes an empty but valid pixmap.
         /// @param[in,out] other the pixmap to move from
@@ -155,8 +156,6 @@ namespace musubi {
             width = other.width;
             height = other.height;
             buffer = std::move(other.buffer);
-            initialized = other.initialized;
-            other.buffer.clear();
             return *this;
         }
 
@@ -167,25 +166,26 @@ namespace musubi {
 
         [[nodiscard]] uint32 get_height() const override { return height; }
 
-        [[nodiscard]] const byte *data() const override { return buffer.data(); }
+        [[nodiscard]] const byte *data() const override { return buffer.get(); }
 
         [[nodiscard]] pixmap_format get_format() const override { return Format; }
 
         /// @details Checks if this pixmap has allocated a backing buffer.
         /// @return whether this pixmap has allocated a backing buffer
-        [[nodiscard]] bool is_allocated() const noexcept { return initialized; }
+        [[nodiscard]] bool is_allocated() const noexcept { return buffer.operator bool(); }
 
         /// @brief Allocates a backing buffer for this pixmap if it does not have one.
         /// @details Does nothing otherwise.
         /// @see is_allocated()
         void ensure_buffer() {
-            if (!is_allocated()) buffer.resize(get_buffer_size(width, height));
-            initialized = true;
+            if (!is_allocated()) {
+                buffer = std::make_unique<byte[]>(get_buffer_size(width, height));
+            }
         }
 
         /// @details Retrieves a mutable pointer to this pixmap's data.
         /// @return a mutable pointer to this pixmap's data
-        [[nodiscard]] byte *data() { return buffer.data(); }
+        [[nodiscard]] byte *data() { return buffer.get(); }
 
         /// @brief Retrieves the data of a specified pixel.
         /// @param[in] x, y the position of the pixel
@@ -248,15 +248,7 @@ namespace musubi {
             return const_cast<byte *>((const_cast<const buffer_pixmap *>(this)->get_ptr(x, y)));
         }
 
-        [[nodiscard]] inline byte &get_value(uint32 x, uint32 y) {
-            ensure_buffer();
-            return buffer[y * width + x];
-        }
-
-        [[nodiscard]] inline const byte &get_value(uint32 x, uint32 y) const { return get_value(x, y); }
-
-        bool initialized{false};
-        std::vector<byte> buffer;
+        std::unique_ptr<byte[]> buffer;
         uint32 width, height;
     };
 }
