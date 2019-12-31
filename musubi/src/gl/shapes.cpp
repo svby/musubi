@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 12/6/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 6 December 2019
 
 #include <musubi/gl/shapes.h>
 
