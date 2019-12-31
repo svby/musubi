@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 11/27/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 27 November 2019
 
 #include <musubi/sdl/sdl_init.h>
 #include <musubi/sdl/sdl_error.h>
