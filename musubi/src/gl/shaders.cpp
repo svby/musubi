@@ -151,7 +151,11 @@ namespace musubi::gl {
         return id;
     }
 
-    shader_program::operator bool() const noexcept { return handle != 0; }
+    bool shader_program::is_valid() const noexcept { return handle != 0; }
 
-    shader_program::operator GLuint() const noexcept { return handle; }
+    shader_program::operator bool() const noexcept(noexcept(is_valid())) { return is_valid(); }
+
+    GLuint shader_program::get_handle() const noexcept { return handle; }
+
+    shader_program::operator GLuint() const noexcept(noexcept(get_handle())) { return get_handle(); }
 }
