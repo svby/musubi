@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 11/23/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 23 November 2019
 
 #include <musubi/exception.h>
 #include <musubi/sdl/sdl_error.h>
@@ -24,10 +24,8 @@ namespace {
                 return 0;
             case musubi::window_mode::fullscreen:
                 return SDL_WINDOW_FULLSCREEN;
-            case musubi::window_mode::maximized:
-                return SDL_WINDOW_MAXIMIZED;
-            case musubi::window_mode::minimized:
-                return SDL_WINDOW_MINIMIZED;
+            case musubi::window_mode::borderless:
+                return SDL_WINDOW_FULLSCREEN_DESKTOP;
             default:
                 throw musubi::assertion_error(
                         "Cannot construct SDL flag from unknown window mode "s
