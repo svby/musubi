@@ -73,9 +73,8 @@ namespace musubi {
         virtual void set_screen(std::unique_ptr<screen> newScreen) = 0;
 
         /// @brief Performs a tick.
-        /// @details This function is typically called from the application's main loop.
+        /// @details This function is typically called from the application's event loop.
         /// @param inputState the current window input state
-        /// @see event_looper
         virtual void update(const input_state &inputState) = 0;
 
         /// @details Retrieves this window's internal identifier.

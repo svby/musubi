@@ -34,9 +34,10 @@ namespace musubi {
     /// Only one instance of an input poller is created for each associated window type;
     /// input pollers are expected to poll input for all windows of a given type.
     ///
-    /// @tparam EventLoop The @ref event_looper type used as this application's main loop.
+    /// @tparam EventLoop The event looper type used as this application's main loop.
     /// The constructor for EventLoop must accept at least one argument;
     /// the first parameter must accept a value of type `std::function<void()>`.
+    /// The default event looper is @ref blocking_looper.
     /// @see window
     template<typename EventLoop = blocking_looper>
     class application final {
@@ -55,12 +56,14 @@ namespace musubi {
         /// @details All registered windows are also destroyed.
         ~application() = default;
 
-        /// @details Retrieves this application's @ref event_looper.
-        /// @return this application's event_looper
+        /// @details Retrieves this application's event looper.
+        /// @return this application's event looper
+        /// @see application
         [[nodiscard]] inline EventLoop &get_looper() noexcept { return looper; }
 
-        /// @details Retrieves this application's @ref event_looper.
-        /// @return this application's event_looper
+        /// @details Retrieves this application's event looper.
+        /// @return this application's event looper
+        /// @see application
         [[nodiscard]] inline const EventLoop &get_looper() const noexcept { return looper; }
 
         /// @brief Retrieves the input state for the specified window.

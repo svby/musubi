@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 11/24/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 3 January 2020
 
 #ifndef MUSUBI_EVENT_LOOPER_H
 #define MUSUBI_EVENT_LOOPER_H
@@ -9,44 +9,39 @@
 #include <vector>
 
 namespace musubi {
-    class event_looper {
+    class blocking_looper final {
     public:
         struct stop_token final {
-            virtual ~stop_token() = default;
+        public:
+            friend class blocking_looper;
 
-            void request_stop() volatile;
+            void request_stop();
 
-            [[nodiscard]] bool is_stop_requested() volatile const;
+            [[nodiscard]] bool is_stop_requested() const;
 
         private:
-            bool stop{false};
+            explicit stop_token(volatile bool &stop);
+
+            volatile bool &stop;
         };
+
+        using action_type = void(stop_token &);
+
+        explicit blocking_looper(std::function<void()> tickFunction);
+
+        blocking_looper &add_action(std::function<action_type> function);
 
         void request_stop();
 
         [[nodiscard]] bool is_stop_requested() const;
 
-        [[nodiscard]] volatile stop_token &get_stop_token();
-
-        [[nodiscard]] volatile const stop_token &get_stop_token() const;
-
-    protected:
-        volatile stop_token token;
-    };
-
-    class blocking_looper final : public virtual event_looper {
-    public:
-        explicit blocking_looper(std::function<void()> updater);
-
-        blocking_looper &add_action(std::function<void(volatile stop_token &)> functor);
-
-        ~blocking_looper();
-
         void loop();
 
     private:
+        volatile bool stop;
+
         std::function<void()> updater;
-        std::vector<std::function<void(volatile stop_token &)>> functors;
+        std::vector<std::function<action_type>> actions;
     };
 }
 
