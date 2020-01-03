@@ -69,6 +69,10 @@ namespace musubi {
 
         /// @brief Sets this window's current @ref screen.
         /// @details The old screen instance is destroyed.
+        ///
+        /// Window implementations should extend the lifetime of the current screen
+        /// to after the current tick has finished, so that setting a new screen
+        /// from the current screen's update callback will not destroy the screen before it is finished.
         /// @param newScreen the new screen
         virtual void set_screen(std::unique_ptr<screen> newScreen) = 0;
 
