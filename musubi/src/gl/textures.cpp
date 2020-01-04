@@ -35,6 +35,8 @@ namespace {
 }
 
 namespace musubi::gl {
+    using namespace musubi::detail;
+
     texture::texture() noexcept = default;
 
     texture::texture(const pixmap &source, bool shouldFlip, GLenum internalFormat) {
@@ -52,7 +54,7 @@ namespace musubi::gl {
     texture::~texture() noexcept {
         if (is_valid()) {
             glDeleteTextures(1, &handle);
-            musubi::log_i("texture") << "Deleted texture " << handle << '\n';
+            log_i("texture") << "Deleted texture " << handle << '\n';
         }
         flip = false;
         handle = 0;

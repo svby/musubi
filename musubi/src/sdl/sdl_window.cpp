@@ -37,6 +37,7 @@ namespace {
 
 namespace musubi::sdl {
     using namespace std::literals;
+    using namespace musubi::detail;
 
     sdl_window::sdl_window(const start_info &startInfo)
             : wrapped(nullptr), context(nullptr) {

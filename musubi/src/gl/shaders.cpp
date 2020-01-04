@@ -11,6 +11,7 @@
 
 namespace {
     using namespace std::literals;
+    using namespace musubi::detail;
     using std::nullopt;
 
     std::string combineError(const std::string &what, const std::optional<std::string> &shaderLog) noexcept {
@@ -71,7 +72,7 @@ namespace {
             throw musubi::gl::shader_error(error.str(), shaderLog);
         }
 
-        musubi::log_i("compileShader") << "Successfully compiled "
+        log_i("compileShader") << "Successfully compiled "
                                        << getShaderTypeName(shaderType) << " shader " << id << '\n';
 
         return id;
@@ -101,7 +102,7 @@ namespace musubi::gl {
     shader_program::~shader_program() noexcept {
         if (operator bool()) {
             glDeleteProgram(handle);
-            musubi::log_i("shader_program") << "Deleted shader program " << handle << '\n';
+            log_i("shader_program") << "Deleted shader program " << handle << '\n';
         }
         handle = 0;
     }
@@ -145,7 +146,7 @@ namespace musubi::gl {
             throw shader_error("Error linking shader program", programLog);
         }
 
-        musubi::log_i("shader_program") << "Successfully linked shader program " << id << '\n';
+        log_i("shader_program") << "Successfully linked shader program " << id << '\n';
 
         handle = id;
         return id;

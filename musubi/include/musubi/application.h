@@ -14,6 +14,7 @@
 
 #include <functional>
 #include <iostream>
+#include <memory>
 #include <thread>
 #include <typeindex>
 #include <unordered_map>
@@ -75,7 +76,7 @@ namespace musubi {
         }
 
         /// @brief Creates and registers a window, forwarding the specified arguments to the constructor of Window,
-        /// and returns a @ref weak_ptr to it.
+        /// and returns a @ref std::weak_ptr "weak pointer" to it.
         /// @details Additionally, a poller of type Poller is registered if one does not already exist.
         /// @tparam Window the window type to create
         /// @tparam Poller the associated @ref input_poller type, `Window::poller_type` by default
@@ -135,9 +136,9 @@ namespace musubi {
 
                 const auto &input = _state->state.window_states[id];
                 if (input.request_close) {
-                    log_i("application") << "Received close request for window " << id << '\n';
+                    detail::log_i("application") << "Received close request for window " << id << '\n';
                     it = _state->windows.erase(it);
-                    log_i("application") << "Discarded window " << id << '\n';
+                    detail::log_i("application") << "Discarded window " << id << '\n';
                 } else ++it;
 
                 window->update(input);

@@ -23,6 +23,7 @@ namespace {
     using namespace std::literals;
     using namespace std::filesystem;
     using namespace musubi;
+    using namespace musubi::detail;
     using std::byte;
     using std::nullopt;
     using nlohmann::json;
