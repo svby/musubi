@@ -31,8 +31,8 @@ namespace musubi {
     /// To be registrable to an application, a window must have an associated @ref input_poller implementation.
     /// If the window type has a member typedef named `poller_type`, it is used by default;
     /// otherwise, it is possible to manually specify an input poller type as a template parameter to @ref create_window().
-    /// Only one instance of an input poller is created for each associated window type;
-    /// input pollers are expected to poll input for all windows of a given type.
+    /// Only one instance of an input poller is created for each associated window type,
+    /// and queried on every tick.
     ///
     /// @tparam EventLoop The event looper type used as this application's main loop.
     /// The constructor for EventLoop must accept at least one argument;

@@ -41,6 +41,7 @@ set(
         musubi_sources
         ${musubi_gl_sources}
         ${musubi_sdl_sources}
+        src/input.cpp
         src/event_looper.cpp
         src/exception.cpp
         src/camera.cpp

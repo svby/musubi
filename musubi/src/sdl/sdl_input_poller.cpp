@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 11/24/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 24 November 2019
 
 #include <musubi/sdl/sdl_input_poller.h>
 #include <musubi/common.h>
