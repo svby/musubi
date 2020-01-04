@@ -1,0 +1,39 @@
+name: Doxygen ⇒ GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: >-
+          sudo apt-get install python3 python3-pip graphviz doxygen &&
+          sudo pip3 install lxml
+      - name: Generate cppreference tagfile
+        run: >-
+          git clone https://github.com/PeterFeicht/cppreference-doc cppreference-doc &&
+          pushd cppreference-doc &&
+          ./index2doxygen-tag.py \
+            web index-functions-cpp.xml index-chapters-cpp.xml ../cppreference-doxygen-web.tag.xml;
+          popd;
+          rm -rf cppreference-doc
+      - name: Generate Doxygen documentation
+        run: mkdir build && doxygen ./Doxyfile
+      - name: Commit generated documentation
+        run: >-
+          git fetch origin gh-pages && git checkout -b gh-pages origin/gh-pages &&
+          rm -rf docs/ && cp -r build/doxygen-output/html/ docs/ &&
+          git config user.name robot && git config user.email "<>" &&
+          git add docs/ && (git commit -m "Doxygen build @ `date`" || true)
+      - name: Push changes to origin/gh-pages
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          force: true

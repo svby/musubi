@@ -55,6 +55,9 @@ Documentation is generated using [Doxygen](http://www.doxygen.nl/).
 To link to standard-library documentation, the [cppreference.com tag file](https://en.cppreference.com/w/Cppreference:Archives#Doxygen_tag_file)
 can be placed in the directory from with `doxygen` is run.
 
+Doxygen is invoked by a GitHub workflow on every commit to `master`;
+the generated content is [pushed to GitHub pages](https://stuhlmeier.github.io/musubi).
+
 ## License
 
 musubi is licensed under the LGPL (version 3).
