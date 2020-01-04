@@ -75,14 +75,14 @@ namespace musubi::sdl {
                 << "Created window with GL_VERSION " << glGetString(GL_VERSION) << '\n';
     }
 
-    sdl_window::sdl_window(const musubi::window::start_info &startInfo, std::unique_ptr<screen> initialScreen)
+    sdl_window::sdl_window(const start_info &startInfo, std::unique_ptr<screen> initialScreen)
             : sdl_window(startInfo) { set_screen(std::move(initialScreen)); }
 
-    sdl_window::sdl_window(musubi::sdl::sdl_window &&other) noexcept
+    sdl_window::sdl_window(sdl_window &&other) noexcept
             : wrapped(std::exchange(other.wrapped, nullptr)),
               context(std::exchange(other.context, nullptr)) {}
 
-    sdl_window &sdl_window::operator=(musubi::sdl::sdl_window &&other) noexcept {
+    sdl_window &sdl_window::operator=(sdl_window &&other) noexcept {
         wrapped = std::exchange(other.wrapped, nullptr);
         context = std::exchange(other.context, nullptr);
         return *this;
@@ -92,8 +92,10 @@ namespace musubi::sdl {
         if (currentScreen) currentScreen->on_detached(this);
         currentScreen.reset();
 
-        SDL_GL_DeleteContext(context);
-        SDL_DestroyWindow(wrapped);
+        if (wrapped) {
+            SDL_GL_DeleteContext(context);
+            SDL_DestroyWindow(wrapped);
+        }
     }
 
     void sdl_window::set_screen(std::unique_ptr<screen> newScreen) {
