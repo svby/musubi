@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 11/24/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 24 November 2019
 
 #include <musubi/sdl/sdl_input_poller.h>
 #include <musubi/common.h>
@@ -8,6 +8,8 @@
 #include <SDL2/SDL_events.h>
 
 namespace musubi::sdl {
+    using namespace musubi::detail;
+
     void sdl_input_poller::poll(application_input_state &inputState) {
         const std::size_t EVENT_QUEUE_SIZE = 4u;
         static SDL_Event eventQueue[EVENT_QUEUE_SIZE];

@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 12/13/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 13 December 2019
 
 #include <musubi/gl/textures.h>
 
@@ -16,8 +16,6 @@
 
 namespace {
     using namespace std::literals;
-
-    constexpr glm::mat4 IDENTITY{glm::identity<glm::mat4>()};
 
     constexpr GLenum getGlFormat(musubi::pixmap_format format) {
         switch (format) {
@@ -37,9 +35,11 @@ namespace {
 }
 
 namespace musubi::gl {
+    using namespace musubi::detail;
+
     texture::texture() noexcept = default;
 
-    texture::texture(const pixmap &source, bool shouldFlip, const GLenum internalFormat) {
+    texture::texture(const pixmap &source, bool shouldFlip, GLenum internalFormat) {
         load(source, shouldFlip, internalFormat);
     }
 
@@ -52,17 +52,17 @@ namespace musubi::gl {
     }
 
     texture::~texture() noexcept {
-        if (operator bool()) {
+        if (is_valid()) {
             glDeleteTextures(1, &handle);
-            musubi::log_i("texture") << "Deleted texture " << handle << '\n';
+            log_i("texture") << "Deleted texture " << handle << '\n';
         }
         flip = false;
         handle = 0;
     }
 
-    bool texture::should_flip() const noexcept { return flip; }
+    bool texture::should_flip() const noexcept { return is_valid() && flip; }
 
-    GLuint texture::load(const pixmap &source, bool shouldFlip, const GLenum internalFormat) {
+    GLuint texture::load(const pixmap &source, bool shouldFlip, GLenum internalFormat) {
         if (handle != 0) this->~texture();
         flip = shouldFlip;
 
@@ -85,16 +85,20 @@ namespace musubi::gl {
         return handle;
     }
 
-    texture::operator bool() const noexcept { return handle != 0; }
+    bool texture::is_valid() const noexcept { return handle != 0; }
 
-    texture::operator GLuint() const noexcept { return handle; }
+    texture::operator bool() const noexcept(noexcept(is_valid())) { return is_valid(); }
 
-    texture_region::texture_region(const std::shared_ptr<::musubi::gl::texture> &texture,
+    GLuint texture::get_name() const noexcept { return handle; }
+
+    texture::operator GLuint() const noexcept(noexcept(get_name())) { return get_name(); }
+
+    texture_region::texture_region(std::weak_ptr<::musubi::gl::texture> texture,
                                    GLfloat u1, GLfloat v1, GLfloat u2, GLfloat v2) noexcept
-            : texture(texture), u1(u1), v1(v1), u2(u2), v2(v2) {}
+            : texture(std::move(texture)), u1(u1), v1(v1), u2(u2), v2(v2) {}
 
-    texture_region::texture_region(const std::shared_ptr<::musubi::gl::texture> &texture) noexcept
-            : texture(texture), u1(0), v1(0), u2(1), v2(1) {}
+    texture_region::texture_region(std::weak_ptr<::musubi::gl::texture> texture) noexcept
+            : texture(std::move(texture)), u1(0), v1(0), u2(1), v2(1) {}
 
     struct gl_texture_renderer::impl {
         shader_program shader{};
@@ -109,7 +113,7 @@ namespace musubi::gl {
         std::vector<GLfloat> texCoords{};
 
         bool drawing{false};
-        std::shared_ptr<texture> currentTexture;
+        std::shared_ptr<texture> currentTexture{nullptr};
 
         LIBMUSUBI_DELCP(impl)
 
@@ -304,7 +308,7 @@ namespace musubi::gl {
 
     void gl_texture_renderer::end_batch(bool resetTransform) {
         pImpl->end_batch(*this);
-        if (resetTransform) transform = IDENTITY;
+        if (resetTransform) transform = glm::mat4{1};
     }
 
     void gl_texture_renderer::batch_draw_texture(GLfloat x, GLfloat y, GLfloat width, GLfloat height) {

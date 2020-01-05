@@ -1,9 +1,9 @@
-//
-// Created by stuhlmeier on 11/23/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 23 November 2019
 
 #include <musubi/exception.h>
-#include <musubi/sdl/sdl_exception.h>
+#include <musubi/sdl/sdl_error.h>
 #include <musubi/sdl/sdl_window.h>
 
 #include <epoxy/gl.h>
@@ -24,10 +24,8 @@ namespace {
                 return 0;
             case musubi::window_mode::fullscreen:
                 return SDL_WINDOW_FULLSCREEN;
-            case musubi::window_mode::maximized:
-                return SDL_WINDOW_MAXIMIZED;
-            case musubi::window_mode::minimized:
-                return SDL_WINDOW_MINIMIZED;
+            case musubi::window_mode::borderless:
+                return SDL_WINDOW_FULLSCREEN_DESKTOP;
             default:
                 throw musubi::assertion_error(
                         "Cannot construct SDL flag from unknown window mode "s
@@ -39,6 +37,7 @@ namespace {
 
 namespace musubi::sdl {
     using namespace std::literals;
+    using namespace musubi::detail;
 
     sdl_window::sdl_window(const start_info &startInfo)
             : wrapped(nullptr), context(nullptr) {
@@ -67,23 +66,23 @@ namespace musubi::sdl {
                 | (startInfo.resizable ? SDL_WINDOW_RESIZABLE : 0)
                 | windowModeFlags(startInfo.mode)
         );
-        if (wrapped == nullptr) throw sdl_exception("Could not create SDL window: "s + SDL_GetError());
+        if (wrapped == nullptr) throw sdl_error("Could not create SDL window: "s + SDL_GetError());
 
         context = SDL_GL_CreateContext(wrapped);
-        if (context == nullptr) throw sdl_exception("Could not create GL context: "s + SDL_GetError());
+        if (context == nullptr) throw sdl_error("Could not create GL context: "s + SDL_GetError());
 
         log_i("sdl_window")
                 << "Created window with GL_VERSION " << glGetString(GL_VERSION) << '\n';
     }
 
-    sdl_window::sdl_window(const musubi::window::start_info &startInfo, std::unique_ptr<screen> initialScreen)
+    sdl_window::sdl_window(const start_info &startInfo, std::unique_ptr<screen> initialScreen)
             : sdl_window(startInfo) { set_screen(std::move(initialScreen)); }
 
-    sdl_window::sdl_window(musubi::sdl::sdl_window &&other) noexcept
+    sdl_window::sdl_window(sdl_window &&other) noexcept
             : wrapped(std::exchange(other.wrapped, nullptr)),
               context(std::exchange(other.context, nullptr)) {}
 
-    sdl_window &sdl_window::operator=(musubi::sdl::sdl_window &&other) noexcept {
+    sdl_window &sdl_window::operator=(sdl_window &&other) noexcept {
         wrapped = std::exchange(other.wrapped, nullptr);
         context = std::exchange(other.context, nullptr);
         return *this;
@@ -93,8 +92,10 @@ namespace musubi::sdl {
         if (currentScreen) currentScreen->on_detached(this);
         currentScreen.reset();
 
-        SDL_GL_DeleteContext(context);
-        SDL_DestroyWindow(wrapped);
+        if (wrapped) {
+            SDL_GL_DeleteContext(context);
+            SDL_DestroyWindow(wrapped);
+        }
     }
 
     void sdl_window::set_screen(std::unique_ptr<screen> newScreen) {

@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 12/13/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 13 December 2019
 
 #include <musubi/renderer.h>
 

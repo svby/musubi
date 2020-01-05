@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 12/19/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 19 December 2019
 
 #include <musubi/screen.h>
 

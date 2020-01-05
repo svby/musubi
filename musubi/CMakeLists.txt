@@ -26,7 +26,7 @@ set(
         include/musubi/sdl/sdl_init.h
         include/musubi/sdl/sdl_window.h
         include/musubi/sdl/sdl_input_poller.h
-        include/musubi/sdl/sdl_exception.h
+        include/musubi/sdl/sdl_error.h
 )
 
 set(
@@ -41,6 +41,7 @@ set(
         musubi_sources
         ${musubi_gl_sources}
         ${musubi_sdl_sources}
+        src/input.cpp
         src/event_looper.cpp
         src/exception.cpp
         src/camera.cpp

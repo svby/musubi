@@ -1,9 +1,9 @@
-//
-// Created by stuhlmeier on 11/27/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 27 November 2019
 
 #include <musubi/sdl/sdl_init.h>
-#include <musubi/sdl/sdl_exception.h>
+#include <musubi/sdl/sdl_error.h>
 
 #include <SDL2/SDL.h>
 
@@ -14,7 +14,7 @@ namespace musubi::sdl {
 
     void init() {
         if (SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
-            throw sdl_exception("Could not initialize SDL: "s + SDL_GetError());
+            throw sdl_error("Could not initialize SDL: "s + SDL_GetError());
         }
     }
 

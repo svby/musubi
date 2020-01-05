@@ -1,6 +1,6 @@
-//
-// Created by stuhlmeier on 12/7/19.
-//
+/// @file
+/// @author stuhlmeier
+/// @date 7 December 2019
 
 #include <musubi/gl/shaders.h>
 
@@ -11,6 +11,7 @@
 
 namespace {
     using namespace std::literals;
+    using namespace musubi::detail;
     using std::nullopt;
 
     std::string combineError(const std::string &what, const std::optional<std::string> &shaderLog) noexcept {
@@ -71,7 +72,7 @@ namespace {
             throw musubi::gl::shader_error(error.str(), shaderLog);
         }
 
-        musubi::log_i("compileShader") << "Successfully compiled "
+        log_i("compileShader") << "Successfully compiled "
                                        << getShaderTypeName(shaderType) << " shader " << id << '\n';
 
         return id;
@@ -101,7 +102,7 @@ namespace musubi::gl {
     shader_program::~shader_program() noexcept {
         if (operator bool()) {
             glDeleteProgram(handle);
-            musubi::log_i("shader_program") << "Deleted shader program " << handle << '\n';
+            log_i("shader_program") << "Deleted shader program " << handle << '\n';
         }
         handle = 0;
     }
@@ -145,13 +146,17 @@ namespace musubi::gl {
             throw shader_error("Error linking shader program", programLog);
         }
 
-        musubi::log_i("shader_program") << "Successfully linked shader program " << id << '\n';
+        log_i("shader_program") << "Successfully linked shader program " << id << '\n';
 
         handle = id;
         return id;
     }
 
-    shader_program::operator bool() const noexcept { return handle != 0; }
+    bool shader_program::is_valid() const noexcept { return handle != 0; }
 
-    shader_program::operator GLuint() const noexcept { return handle; }
+    shader_program::operator bool() const noexcept(noexcept(is_valid())) { return is_valid(); }
+
+    GLuint shader_program::get_handle() const noexcept { return handle; }
+
+    shader_program::operator GLuint() const noexcept(noexcept(get_handle())) { return get_handle(); }
 }
