@@ -1,0 +1,25 @@
+<map id="musubi/include/musubi/application.h" name="musubi/include/musubi/application.h">
+<area shape="rect" id="node2" href="$dc/d54/common_8h.html" title="musubi/common.h" alt="" coords="312,244,441,271"/>
+<area shape="rect" id="node6" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/iostream.html" title="iostream" alt="" coords="733,326,805,353"/>
+<area shape="rect" id="node11" href="$da/d81/event__looper_8h.html" title="musubi/event_looper.h" alt="" coords="857,95,1011,121"/>
+<area shape="rect" id="node12" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/functional.html" title="functional" alt="" coords="807,169,885,196"/>
+<area shape="rect" id="node14" href="$dd/d2d/exception_8h.html" title="musubi/exception.h" alt="" coords="1035,95,1169,121"/>
+<area shape="rect" id="node17" href="$de/ded/input_8h.html" title="musubi/input.h" alt="" coords="435,95,542,121"/>
+<area shape="rect" id="node18" href="$d3/df1/window_8h.html" title="musubi/window.h" alt="" coords="422,169,545,196"/>
+<area shape="rect" id="node20" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/memory.html" title="memory" alt="" coords="635,244,705,271"/>
+<area shape="rect" id="node21" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/unordered_map.html" title="unordered_map" alt="" coords="569,169,680,196"/>
+<area shape="rect" id="node22" href="$d0/d63/rw__lock_8h.html" title="musubi/rw_lock.h" alt="" coords="1193,95,1317,121"/>
+<area shape="rect" id="node24" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/thread.html" title="thread" alt="" coords="1342,95,1401,121"/>
+<area shape="rect" id="node25" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/typeindex.html" title="typeindex" alt="" coords="1425,95,1504,121"/>
+<area shape="rect" id="node3" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/cstdint.html" title="cstdint" alt="" coords="471,326,533,353"/>
+<area shape="rect" id="node4" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/cstring.html" title="cstring" alt="" coords="557,326,618,353"/>
+<area shape="rect" id="node5" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/iomanip.html" title="iomanip" alt="" coords="642,326,709,353"/>
+<area shape="rect" id="node7" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/string.html" title="string" alt="" coords="5,326,60,353"/>
+<area shape="rect" id="node8" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/string_view.html" title="string_view" alt="" coords="85,326,173,353"/>
+<area shape="rect" id="node9" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/typeinfo.html" title="typeinfo" alt="" coords="197,326,265,353"/>
+<area shape="rect" id="node13" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/vector.html" title="vector" alt="" coords="910,169,969,196"/>
+<area shape="rect" id="node15" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/exception.html" title="exception" alt="" coords="1099,169,1177,196"/>
+<area shape="rect" id="node16" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/stdexcept.html" title="stdexcept" alt="" coords="996,169,1075,196"/>
+<area shape="rect" id="node19" href="$dd/ddc/screen_8h.html" title="musubi/screen.h" alt="" coords="465,244,584,271"/>
+<area shape="rect" id="node23" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/header/shared_mutex.html" title="shared_mutex" alt="" coords="1203,169,1307,196"/>
+</map>

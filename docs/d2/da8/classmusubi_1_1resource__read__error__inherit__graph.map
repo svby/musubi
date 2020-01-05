@@ -1,0 +1,6 @@
+<map id="musubi::resource_read_error" name="musubi::resource_read_error">
+<area shape="rect" id="node5" href="$d0/d1f/classmusubi_1_1archive__read__error.html" title="A resource_read_error indicating that an attempt to load a resource into memory from an archive on di..." alt="" coords="9,333,156,375"/>
+<area shape="rect" id="node2" href="$d5/d76/classmusubi_1_1application__error.html" title="The base exception type for all application runtime_errors. " alt="" coords="15,155,150,196"/>
+<area shape="rect" id="node3" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/error/runtime_error.html" title="STL class. " alt="" coords="21,80,145,107"/>
+<area shape="rect" id="node4" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/error/exception.html" title="STL class. " alt="" coords="31,5,135,32"/>
+</map>

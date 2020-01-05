@@ -1,0 +1,4 @@
+<map id="musubi::renderer" name="musubi::renderer">
+<area shape="rect" id="node2" href="$d3/d72/classmusubi_1_1gl_1_1gl__shape__renderer.html" title="A renderer for line&#45;based polygons. " alt="" coords="5,80,148,121"/>
+<area shape="rect" id="node3" href="$d7/d43/classmusubi_1_1gl_1_1gl__texture__renderer.html" title="A renderer for textures and texture regions. " alt="" coords="173,80,319,121"/>
+</map>
