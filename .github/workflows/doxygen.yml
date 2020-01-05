@@ -30,7 +30,7 @@ jobs:
           git fetch origin gh-pages && git checkout -b gh-pages origin/gh-pages &&
           rm -rf docs/ && cp -r build/doxygen-output/html/ docs/ &&
           git config user.name robot && git config user.email "<>" &&
-          git add docs/ && (git commit -m "Doxygen build @ `date`" || true)
+          git add docs/ && (git commit -m "Doxygen build `git rev-parse master` @ `date`" || true)
       - name: Push changes to origin/gh-pages
         uses: ad-m/github-push-action@v0.5.0
         with:
