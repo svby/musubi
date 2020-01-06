@@ -67,6 +67,7 @@ set(
         include/musubi/renderer.h
         include/musubi/screen.h
         include/musubi/asset_registry.h
+        include/musubi/asset_loader.h
 )
 
 set(
