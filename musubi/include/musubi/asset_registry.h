@@ -7,6 +7,8 @@
 
 #include "musubi/input.h"
 
+#include <nlohmann/json.hpp>
+
 #include <any>
 #include <cstddef>
 #include <filesystem>
@@ -23,24 +25,38 @@ namespace musubi {
     class asset_registry final {
     public:
         /// @brief An individual asset pack, loaded by an @ref asset_registry.
-        /// @details Asset packs can currently only be loaded into memory in full,
+        /// @details Asset packs can only be loaded into memory in full,
         /// as not all archive formats support random access.
-        /// Resource byte buffers can be retrieved via @ref get_buffer().
+        /// Loaded contents ("items") can be retrieved via @ref get_item().
+        /// @see pack_item
         struct mpack final {
+        public:
             friend class asset_registry;
 
-            /// @brief Retrieves a loaded resource's byte buffer.
-            /// @details If the resource does not exist or no buffer was loaded, `nullopt` is returned.
-            /// @param name the resource name
-            /// @return the loaded resource, or nullopt
-            [[nodiscard]] std::optional<const std::vector<byte> *> get_buffer(std::string_view name) const;
+            struct pack_item {
+            public:
+                pack_item(std::string name, std::optional<std::vector<byte>> buffer, nlohmann::json config);
 
-        private:
-            struct mpack_entry {
-                std::vector<byte> buffer;
+                [[nodiscard]] const std::string &get_name() const;
+
+                [[nodiscard]] std::optional<std::reference_wrapper<const std::vector<byte>>> get_buffer() const;
+
+                [[nodiscard]] const nlohmann::json &get_configuration() const;
+
+            private:
+                std::string name;
+                std::optional<std::vector<byte>> buffer;
+                nlohmann::json config;
             };
 
-            std::map<std::string, mpack_entry, std::less<>> contents;
+            [[nodiscard]] std::optional<std::reference_wrapper<const pack_item>>
+            get_item(std::string_view name) const;
+
+            std::optional<std::reference_wrapper<const pack_item>>
+            operator[](std::string_view name) const noexcept(noexcept(get_item(name)));
+
+        private:
+            std::map<std::string, pack_item, std::less<>> contents;
         };
 
         LIBMUSUBI_DELCP(asset_registry)

@@ -35,18 +35,18 @@ namespace musubi {
     };
 
     template<typename Asset, typename Loader = asset_loader<Asset>, typename ...LoaderArgs>
-    inline Asset load_asset(const asset_registry::mpack &pack, std::string_view name, LoaderArgs &&...args) {
-        const auto buffer = pack.get_buffer(name);
-        if (!buffer) {
-            throw resource_read_error(
-                    "Could not load asset "s + std::string(name) + "from pack, asset was not read"s);
-        }
+    inline Asset load_asset(const asset_registry::mpack::pack_item &item, LoaderArgs &&...args) {
+        Loader loader;
+        return loader(item, std::forward<LoaderArgs>(args)...);
+    }
 
-        if (const auto bytes = buffer.value(); bytes) {
-            Loader loader;
-            return loader(bytes->data(), bytes->size(), std::forward<LoaderArgs>(args)...);
+    template<typename Asset, typename Loader = asset_loader<Asset>, typename ...LoaderArgs>
+    inline Asset load_asset(const asset_registry::mpack &pack, std::string_view name, LoaderArgs &&...args) {
+        if (const auto item = pack[name]; item) {
+            return load_asset<Asset, Loader, LoaderArgs...>(*item, std::forward<LoaderArgs>(args)...);
         } else {
-            throw std::invalid_argument("Could not load asset "s + std::string(name) + "from pack, buffer was null");
+            throw resource_read_error(
+                    "Could not load asset "s + std::string(name) + "; item was not read"s);
         }
     }
 }

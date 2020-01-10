@@ -169,7 +169,7 @@ struct asset_test_screen : public basic_screen {
     void on_attached(window *window) override {
         assets = asset_registry::from_paths({"."});
         const auto pack = assets->load_pack("test");
-        const auto &testFile = *pack->get_buffer("test.txt").value();
+        const auto &testFile = pack->get_item("test.txt")->get().get_buffer()->get();
         const auto data = reinterpret_cast<const char *>(testFile.data());
 
         std::cout << "Loaded from test.txt: "
