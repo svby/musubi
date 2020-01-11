@@ -51,4 +51,20 @@ namespace musubi {
     }
 }
 
+// Basic asset loaders
+namespace musubi {
+    template<typename CharT, typename Traits, typename Allocator>
+    struct asset_loader<std::basic_string<CharT, Traits, Allocator>> {
+        using string_type = std::basic_string<CharT, Traits, Allocator>;
+
+        string_type operator()(const asset_registry::mpack::pack_item &item) {
+            if (const auto buffer = item.get_buffer(); buffer) {
+                const std::vector<std::byte> &bytes = buffer->get();
+                const auto chars = reinterpret_cast<const unsigned char *>(bytes.data());
+                return string_type(chars, chars + bytes.size());
+            } else throw asset_load_error::no_buffer(item.get_name());
+        }
+    };
+}
+
 #endif //MUSUBI_ASSET_LOADER_H

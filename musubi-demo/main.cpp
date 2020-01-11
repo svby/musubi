@@ -1,4 +1,5 @@
 #include <musubi/application.h>
+#include <musubi/asset_loader.h>
 #include <musubi/asset_registry.h>
 #include <musubi/pixmap.h>
 #include <musubi/screen.h>
@@ -177,6 +178,18 @@ struct asset_test_screen : public basic_screen {
     }
 };
 
+struct asset_load_test_screen : public basic_screen {
+    std::unique_ptr<asset_registry> assets;
+
+    void on_attached(window *window) override {
+        assets = asset_registry::from_paths({"."});
+        const auto pack = assets->load_pack("test");
+
+        const auto text = load_asset<std::string>(*pack, "test.txt");
+        std::cout << "Loaded from test.txt: " << text << '\n';
+    }
+};
+
 int main() {
     sdl::scoped_init disposer;
 
@@ -187,7 +200,7 @@ int main() {
             .width = 1280,
             .height = 720,
             .mode = window_mode::windowed
-    }, std::make_unique<asset_test_screen>());
+    }, std::make_unique<asset_load_test_screen>());
 
     demo.get_looper().loop();
 }

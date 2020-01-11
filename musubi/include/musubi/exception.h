@@ -35,18 +35,30 @@ namespace musubi {
         using std::runtime_error::runtime_error;
     };
 
-    /// @brief An @ref application_error indicating that an attempt to load a resource into memory has failed.
+    /// @brief An @ref application_error indicating that an attempt to read a resource into memory has failed.
     class resource_read_error : public application_error {
     public:
         using application_error::application_error;
     };
 
-    /// @brief A @ref resource_read_error indicating that an attempt to load a resource into memory
-    /// from an archive on disk has failed.
+    /// @brief A @ref resource_read_error indicating that an attempt to read from an archive on disk has failed.
     /// @details This may occur when reading an invalid, modified or corrupt @ref asset_registry::mpack "asset pack".
     class archive_read_error : public resource_read_error {
     public:
         using resource_read_error::resource_read_error;
+    };
+
+    /// @brief An @ref application_error indicating that an error occurred while loading an asset from a resource pack.
+    /// @see asset_registry::mpack
+    /// @see asset_loader
+    class asset_load_error : public application_error {
+    public:
+        using application_error::application_error;
+
+        /// @brief Indicates that an asset could not be loaded because a resource had no associated loaded buffer.
+        /// @param itemName the name of the resource
+        /// @return a new exception
+        static asset_load_error no_buffer(std::string_view itemName) noexcept;
     };
 }
 
