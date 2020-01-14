@@ -1,6 +1,7 @@
 <map id="musubi/include/musubi/input.h" name="musubi/include/musubi/input.h">
 <area shape="rect" id="node2" href="$db/d32/application_8h.html" title="musubi/include/musubi\l/application.h" alt="" coords="5,95,160,136"/>
 <area shape="rect" id="node3" href="$d8/dc8/sdl__window_8h.html" title="musubi/include/musubi\l/sdl/sdl_window.h" alt="" coords="120,184,275,225"/>
-<area shape="rect" id="node4" href="$d5/ded/asset__registry_8h_source.html" title="musubi/include/musubi\l/asset_registry.h" alt="" coords="235,95,389,136"/>
-<area shape="rect" id="node5" href="$d6/d76/sdl__input__poller_8h.html" title="musubi/include/musubi\l/sdl/sdl_input_poller.h" alt="" coords="413,95,568,136"/>
+<area shape="rect" id="node4" href="$d5/ded/asset__registry_8h_source.html" title="musubi/include/musubi\l/asset_registry.h" alt="" coords="413,95,568,136"/>
+<area shape="rect" id="node6" href="$d6/d76/sdl__input__poller_8h.html" title="musubi/include/musubi\l/sdl/sdl_input_poller.h" alt="" coords="235,95,389,136"/>
+<area shape="rect" id="node5" href="$d8/dd0/asset__loader_8h.html" title="musubi/include/musubi\l/asset_loader.h" alt="" coords="413,184,568,225"/>
 </map>

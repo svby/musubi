@@ -20,6 +20,7 @@ var searchData=
   ['next_5fpermutation',['next_permutation',['http://en.cppreference.com/w/cpp/algorithm/next_permutation.html',1,'std']]],
   ['nextafter',['nextafter',['http://en.cppreference.com/w/cpp/numeric/math/nextafter.html',1,'std']]],
   ['nexttoward',['nexttoward',['http://en.cppreference.com/w/cpp/numeric/math/nextafter.html',1,'std']]],
+  ['no_5fbuffer',['no_buffer',['../df/d88/classmusubi_1_1asset__load__error.html#aec9e240f8f6216a205d0efe8e0020126',1,'musubi::asset_load_error']]],
   ['no_5femit_5fon_5fflush',['no_emit_on_flush',['http://en.cppreference.com/w/cpp/io/manip/emit_on_flush.html',1,'std']]],
   ['noboolalpha',['noboolalpha',['http://en.cppreference.com/w/cpp/io/manip/boolalpha.html',1,'std']]],
   ['none',['none',['http://en.cppreference.com/w/cpp/utility/bitset/all_any_none.html',1,'std::bitset']]],

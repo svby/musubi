@@ -10,7 +10,7 @@ var searchData=
   ['make_5funsigned',['make_unsigned',['http://en.cppreference.com/w/cpp/types/make_unsigned.html',1,'std']]],
   ['make_5funsigned_5ft',['make_unsigned_t',['http://en.cppreference.com/w/cpp/types/make_unsigned.html',1,'std']]],
   ['map',['map',['http://en.cppreference.com/w/cpp/container/map.html',1,'std::map&lt; K, T &gt;'],['http://en.cppreference.com/w/cpp/container/map.html',1,'std::pmr::map']]],
-  ['map_3c_20std_3a_3astring_2c_20mpack_5fentry_2c_20std_3a_3aless_3c_3e_20_3e',['map&lt; std::string, mpack_entry, std::less&lt;&gt; &gt;',['http://en.cppreference.com/w/cpp/container/map.html',1,'std']]],
+  ['map_3c_20std_3a_3astring_2c_20musubi_3a_3aasset_5fregistry_3a_3ampack_3a_3apack_5fitem_2c_20std_3a_3aless_3c_3e_20_3e',['map&lt; std::string, musubi::asset_registry::mpack::pack_item, std::less&lt;&gt; &gt;',['http://en.cppreference.com/w/cpp/container/map.html',1,'std']]],
   ['mask',['mask',['http://en.cppreference.com/w/cpp/locale/ctype_base.html',1,'std::ctype::mask'],['http://en.cppreference.com/w/cpp/locale/ctype_base.html',1,'std::ctype_base::mask'],['http://en.cppreference.com/w/cpp/locale/ctype_base.html',1,'std::ctype_byname::mask']]],
   ['mask_5farray',['mask_array',['http://en.cppreference.com/w/cpp/numeric/valarray/mask_array.html',1,'std']]],
   ['match_5fresults',['match_results',['http://en.cppreference.com/w/cpp/regex/match_results.html',1,'std']]],

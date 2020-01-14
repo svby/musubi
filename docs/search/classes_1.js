@@ -65,7 +65,7 @@ var searchData=
   ['bitset',['bitset',['http://en.cppreference.com/w/cpp/utility/bitset.html',1,'std']]],
   ['blocking_5flooper',['blocking_looper',['../da/d61/classmusubi_1_1blocking__looper.html',1,'musubi']]],
   ['bool_5fconstant',['bool_constant',['http://en.cppreference.com/w/cpp/types/integral_constant.html',1,'std']]],
-  ['boyer_5fmoore_5fhorspool_5fsearcher',['boyer_moore_horspool_searcher',['http://en.cppreference.com/w/cpp/utility/functional/boyer_moore_horspool_searcher.html',1,'std::boyer_moore_horspool_searcher'],['http://en.cppreference.com/w/cpp/experimental/boyer_moore_horspool_searcher.html',1,'std::experimental::boyer_moore_horspool_searcher']]],
+  ['boyer_5fmoore_5fhorspool_5fsearcher',['boyer_moore_horspool_searcher',['http://en.cppreference.com/w/cpp/experimental/boyer_moore_horspool_searcher.html',1,'std::experimental::boyer_moore_horspool_searcher'],['http://en.cppreference.com/w/cpp/utility/functional/boyer_moore_horspool_searcher.html',1,'std::boyer_moore_horspool_searcher']]],
   ['boyer_5fmoore_5fsearcher',['boyer_moore_searcher',['http://en.cppreference.com/w/cpp/experimental/boyer_moore_searcher.html',1,'std::experimental::boyer_moore_searcher'],['http://en.cppreference.com/w/cpp/utility/functional/boyer_moore_searcher.html',1,'std::boyer_moore_searcher']]],
   ['buffer_5fpixmap',['buffer_pixmap',['../de/df5/classmusubi_1_1buffer__pixmap.html',1,'musubi']]],
   ['byte',['byte',['http://en.cppreference.com/w/cpp/types/byte.html',1,'std']]]

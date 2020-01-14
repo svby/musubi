@@ -5,6 +5,7 @@ var searchData=
   ['once_5fflag',['once_flag',['http://en.cppreference.com/w/cpp/thread/once_flag.html',1,'std']]],
   ['optional',['optional',['http://en.cppreference.com/w/cpp/utility/optional.html',1,'std::optional'],['http://en.cppreference.com/w/cpp/experimental/optional.html',1,'std::experimental::optional']]],
   ['optional_3c_20std_3a_3astring_20_3e',['optional&lt; std::string &gt;',['http://en.cppreference.com/w/cpp/utility/optional.html',1,'std']]],
+  ['optional_3c_20std_3a_3avector_3c_20std_3a_3abyte_20_3e_20_3e',['optional&lt; std::vector&lt; std::byte &gt; &gt;',['http://en.cppreference.com/w/cpp/utility/optional.html',1,'std']]],
   ['ostream',['ostream',['http://en.cppreference.com/w/cpp/io/basic_ostream.html',1,'std']]],
   ['ostream_5fiterator',['ostream_iterator',['http://en.cppreference.com/w/cpp/iterator/ostream_iterator.html',1,'std']]],
   ['ostream_5fjoiner',['ostream_joiner',['http://en.cppreference.com/w/cpp/experimental/ostream_joiner.html',1,'std::experimental']]],

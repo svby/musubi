@@ -1,5 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$df/d74/classmusubi_1_1renderer.html" title="A common interface for renderer objects. " alt="" coords="5,46,124,73"/>
-<area shape="rect" id="node2" href="$d3/d72/classmusubi_1_1gl_1_1gl__shape__renderer.html" title="A renderer for line&#45;based polygons. " alt="" coords="174,5,317,47"/>
-<area shape="rect" id="node3" href="$d7/d43/classmusubi_1_1gl_1_1gl__texture__renderer.html" title="A renderer for textures and texture regions. " alt="" coords="172,71,319,112"/>
+<area shape="rect" id="node1" href="$d2/d4b/classmusubi_1_1pixmap.html" title="A common interface for pixmap images. " alt="" coords="5,13,120,39"/>
+<area shape="rect" id="node2" href="$de/df5/classmusubi_1_1buffer__pixmap.html" title="A memory&#45;backed pixmap. " alt="" coords="168,5,323,47"/>
 </map>

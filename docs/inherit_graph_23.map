@@ -1,12 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/error/exception.html" title="STL class. " alt="" coords="5,96,109,123"/>
-<area shape="rect" id="node2" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/error/logic_error.html" title="STL class. " alt="" coords="165,64,273,91"/>
-<area shape="rect" id="node5" href="/home/runner/work/musubi/musubi/cppreference-doxygen-web.tag.xml$cpp/error/runtime_error.html" title="STL class. " alt="" coords="157,121,281,148"/>
-<area shape="rect" id="node3" href="$d2/d57/classmusubi_1_1assertion__error.html" title="A framework&#45;internal logic_error. " alt="" coords="329,5,488,32"/>
-<area shape="rect" id="node4" href="$dc/d4c/classmusubi_1_1illegal__state__error.html" title="A logic_error indicating that some public invariant has been violated. " alt="" coords="338,57,479,98"/>
-<area shape="rect" id="node6" href="$d5/d76/classmusubi_1_1application__error.html" title="The base exception type for all application runtime_errors. " alt="" coords="341,122,476,163"/>
-<area shape="rect" id="node7" href="$d4/d7e/classmusubi_1_1gl_1_1shader__error.html" title="An application_error indicating that an error occurred during shader compilation/linking. " alt="" coords="549,57,678,98"/>
-<area shape="rect" id="node8" href="$dd/d55/classmusubi_1_1resource__read__error.html" title="An application_error indicating that an attempt to load a resource into memory has failed..." alt="" coords="536,122,691,163"/>
-<area shape="rect" id="node10" href="$de/d5d/classmusubi_1_1sdl_1_1sdl__error.html" title="An application_error indicating that an SDL library call has failed. " alt="" coords="540,188,687,215"/>
-<area shape="rect" id="node9" href="$d0/d1f/classmusubi_1_1archive__read__error.html" title="A resource_read_error indicating that an attempt to load a resource into memory from an archive on di..." alt="" coords="739,122,885,163"/>
+<area shape="rect" id="node1" href="$d6/d61/classmusubi_1_1rw__lock.html" title="A readers/writer lock backed by a shared_mutex. " alt="" coords="5,5,123,32"/>
 </map>
