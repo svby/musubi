@@ -41,6 +41,7 @@ Rolling-release distributions (such as Arch or Gentoo) are up-to-date and theref
    - an `application` owns `window`s, which own `screen`s
  - asset packing & managing
    - assets are automatically packed in `xz` archives by `mpack.py`, and can be loaded and read at runtime
+   - extensible asset loading mechanism
 
 Currently, `libmusubi` will assume and request OpenGL 3.3 or greater by default.
 No abstractions for versions older than 3.0 are planned, due to API differences.

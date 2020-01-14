@@ -95,11 +95,28 @@ namespace musubi {
     using namespace std::filesystem;
     using nlohmann::json;
 
-    std::optional<const std::vector<byte> *> asset_registry::mpack::get_buffer(std::string_view name) const {
-        const auto it = contents.find(name);
-        if (it == contents.end()) return nullopt;
-        return &it->second.buffer;
+    asset_registry::mpack::pack_item::pack_item
+            (std::string name, std::optional<std::vector<byte>> buffer, nlohmann::json config)
+            : name(std::move(name)), buffer(std::move(buffer)), config(std::move(config)) {}
+
+    const std::string &asset_registry::mpack::pack_item::get_name() const { return name; }
+
+    std::optional<std::reference_wrapper<const std::vector<byte>>>
+    asset_registry::mpack::pack_item::get_buffer() const {
+        if (buffer) return std::cref(*buffer);
+        else return nullopt;
     }
+
+    const nlohmann::json &asset_registry::mpack::pack_item::get_configuration() const { return config; }
+
+    std::optional<std::reference_wrapper<const asset_registry::mpack::pack_item>>
+    asset_registry::mpack::get_item(std::string_view name) const {
+        if (const auto it = contents.find(name); it != contents.end()) return it->second;
+        else return nullopt;
+    }
+
+    std::optional<std::reference_wrapper<const asset_registry::mpack::pack_item>>
+    asset_registry::mpack::operator[](std::string_view name) const { return get_item(name); }
 
     struct asset_registry::pack_data {
         path packPath;
@@ -201,7 +218,10 @@ namespace musubi {
 
                 archive_read_data(archive, buffer.data(), size);
 
-                pack->contents.emplace(toLoadIt->second, mpack::mpack_entry{std::move(buffer)});
+                pack->contents.emplace(
+                        toLoadIt->second,
+                        mpack::pack_item(toLoadIt->second, std::move(buffer), {})
+                );
                 toLoad.erase(toLoadIt);
             } else {
                 archive_read_data_skip(archive);

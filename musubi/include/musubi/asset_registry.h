@@ -7,6 +7,8 @@
 
 #include "musubi/input.h"
 
+#include <nlohmann/json.hpp>
+
 #include <any>
 #include <cstddef>
 #include <filesystem>
@@ -23,24 +25,57 @@ namespace musubi {
     class asset_registry final {
     public:
         /// @brief An individual asset pack, loaded by an @ref asset_registry.
-        /// @details Asset packs can currently only be loaded into memory in full,
+        /// @details Asset packs can only be loaded into memory in full,
         /// as not all archive formats support random access.
-        /// Resource byte buffers can be retrieved via @ref get_buffer().
+        /// Loaded contents ("items") can be retrieved via @ref get_item().
+        /// @see pack_item
         struct mpack final {
+        public:
             friend class asset_registry;
 
-            /// @brief Retrieves a loaded resource's byte buffer.
-            /// @details If the resource does not exist or no buffer was loaded, `nullopt` is returned.
-            /// @param name the resource name
-            /// @return the loaded resource, or nullopt
-            [[nodiscard]] std::optional<const std::vector<byte> *> get_buffer(std::string_view name) const;
+            /// @brief A single resource, loaded as part of a resource pack.
+            /// @details Resources may or may not correspond to actual loaded files.
+            /// @see mpack
+            struct pack_item {
+            public:
+                /// @brief Constructs a pack item with the specified name, optional buffer, and JSON configuration.
+                /// @param name the resource name
+                /// @param buffer the optional loaded contents
+                /// @param config the configuration
+                pack_item(std::string name, std::optional<std::vector<byte>> buffer, nlohmann::json config);
 
-        private:
-            struct mpack_entry {
-                std::vector<byte> buffer;
+                /// @brief Retrieves this resource's name.
+                /// @return this resource's name
+                [[nodiscard]] const std::string &get_name() const;
+
+                /// @brief Retrieves this resource's loaded buffer, if present.
+                /// @return this resource's buffer, or nullopt
+                [[nodiscard]] std::optional<std::reference_wrapper<const std::vector<byte>>> get_buffer() const;
+
+                /// @brief Retrieves this resource's JSON configuration.
+                /// @return this resource's configuration object
+                [[nodiscard]] const nlohmann::json &get_configuration() const;
+
+            private:
+                std::string name;
+                std::optional<std::vector<byte>> buffer;
+                nlohmann::json config;
             };
 
-            std::map<std::string, mpack_entry, std::less<>> contents;
+            /// @details Retrieves the resource with the specified name.
+            /// @param name the resource name
+            /// @return the resource with the specified name
+            [[nodiscard]] std::optional<std::reference_wrapper<const pack_item>>
+            get_item(std::string_view name) const;
+
+            /// @details Retrieves the resource with the specified name.
+            /// @param name the resource name
+            /// @return the resource with the specified name
+            std::optional<std::reference_wrapper<const pack_item>>
+            operator[](std::string_view name) const noexcept(noexcept(get_item(name)));
+
+        private:
+            std::map<std::string, pack_item, std::less<>> contents;
         };
 
         LIBMUSUBI_DELCP(asset_registry)
