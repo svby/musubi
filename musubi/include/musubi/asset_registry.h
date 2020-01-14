@@ -33,14 +33,27 @@ namespace musubi {
         public:
             friend class asset_registry;
 
+            /// @brief A single resource, loaded as part of a resource pack.
+            /// @details Resources may or may not correspond to actual loaded files.
+            /// @see mpack
             struct pack_item {
             public:
+                /// @brief Constructs a pack item with the specified name, optional buffer, and JSON configuration.
+                /// @param name the resource name
+                /// @param buffer the optional loaded contents
+                /// @param config the configuration
                 pack_item(std::string name, std::optional<std::vector<byte>> buffer, nlohmann::json config);
 
+                /// @brief Retrieves this resource's name.
+                /// @return this resource's name
                 [[nodiscard]] const std::string &get_name() const;
 
+                /// @brief Retrieves this resource's loaded buffer, if present.
+                /// @return this resource's buffer, or nullopt
                 [[nodiscard]] std::optional<std::reference_wrapper<const std::vector<byte>>> get_buffer() const;
 
+                /// @brief Retrieves this resource's JSON configuration.
+                /// @return this resource's configuration object
                 [[nodiscard]] const nlohmann::json &get_configuration() const;
 
             private:
@@ -49,9 +62,15 @@ namespace musubi {
                 nlohmann::json config;
             };
 
+            /// @details Retrieves the resource with the specified name.
+            /// @param name the resource name
+            /// @return the resource with the specified name
             [[nodiscard]] std::optional<std::reference_wrapper<const pack_item>>
             get_item(std::string_view name) const;
 
+            /// @details Retrieves the resource with the specified name.
+            /// @param name the resource name
+            /// @return the resource with the specified name
             std::optional<std::reference_wrapper<const pack_item>>
             operator[](std::string_view name) const noexcept(noexcept(get_item(name)));
 

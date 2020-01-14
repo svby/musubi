@@ -11,6 +11,22 @@
 #include <memory>
 
 namespace musubi {
+    /// @brief A template that serves as a default asset loader.
+    /// for @ref asset_registry::mpack::pack_item "resource items".
+    /// @details
+    /// Implementations should define the following symbols:
+    /// <table>
+    /// <caption>Required symbols for asset_loader</caption>
+    /// <tr><th>Type</th><th>Name</th><th>Usage</th></tr>
+    /// <tr>
+    ///     <td>`Asset(mpack::pack_item const&, ...)`</td>
+    ///     <td>`operator()`</td>
+    ///     <td>
+    ///         Constructs an Asset from the specified resource and returns it.
+    ///     </td>
+    /// </tr>
+    /// </table>
+    /// @tparam Asset the asset type to load
     template<typename Asset>
     struct asset_loader;
 
@@ -34,12 +50,21 @@ namespace musubi {
         }
     };
 
+    /// @brief Loads an asset from the specified pack item, forwarding the specified arguments to the asset loader.
+    /// @param item the pack item
+    /// @param args the forwarded arguments
+    /// @tparam LoaderArgs a parameter pack to hold the forwarded arguments
     template<typename Asset, typename Loader = asset_loader<Asset>, typename ...LoaderArgs>
     inline Asset load_asset(const asset_registry::mpack::pack_item &item, LoaderArgs &&...args) {
         Loader loader;
         return loader(item, std::forward<LoaderArgs>(args)...);
     }
 
+    /// @brief Loads an asset from the specified pack item, forwarding the specified arguments to the asset loader.
+    /// @param pack the resource pack
+    /// @param name the name of the pack item to retrieve
+    /// @param args the forwarded arguments
+    /// @tparam LoaderArgs a parameter pack to hold the forwarded arguments
     template<typename Asset, typename Loader = asset_loader<Asset>, typename ...LoaderArgs>
     inline Asset load_asset(const asset_registry::mpack &pack, std::string_view name, LoaderArgs &&...args) {
         if (const auto item = pack[name]; item) {
